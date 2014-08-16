@@ -1,0 +1,28 @@
+{
+    "name": "earls/flamingo-command-queue-bundle",
+    "type": "symfony-bundle",
+    "description": "Create easy queuing",
+    "keywords": ["command", "queue", "task", "runner", "rhino", "report"],
+    "homepage": "https://github.com/cifren/FlamingoCommandQueue",
+    "license": "MIT",       
+    "minimum-stability": "dev", 
+    "authors": [
+        {
+            "name": "Francis Le Coq",
+            "email": "flecoq@earls.ca"
+        },
+        {
+            "name": "Dev earls",
+            "homepage": "http:\\www.earls.ca"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.3",
+        "symfony/framework-bundle": "~2.4",
+        "doctrine/orm": "~2.2,>=2.2.3"
+    },
+    "autoload":     {
+        "psr-0": { "Earls\\FlamingoCommandQueueBundle": "" }
+    },
+    "target-dir": "Earls/FlamingoCommandQueueBundle"
+}
