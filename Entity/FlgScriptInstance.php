@@ -1,9 +1,14 @@
 <?php
 
-namespace Earls\FlamingoCommandQueue\Entity;
+namespace Earls\FlamingoCommandQueueBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Earls\FlamingoCommandQueue\Entity\FlgScriptInstance
+ * Earls\FlamingoCommandQueueBundle\Entity\FlgScriptInstance
+ * 
+ * @ORM\Table(name="flg_script_instance")
+ * @ORM\Entity
  */
 class FlgScriptInstance
 {
@@ -56,7 +61,7 @@ class FlgScriptInstance
     /**
      * @var FlgScriptCurrentStatus $flgScriptCurrentStatus
      *
-     * @OneToOne(targetEntity="FlgScriptCurrentStatus", mappedBy="flgScriptInstance")
+     * @ORM\OneToOne(targetEntity="FlgScriptCurrentStatus", mappedBy="flgScriptInstance")
      */
     protected $flgScriptCurrentStatus;
 
@@ -108,7 +113,7 @@ class FlgScriptInstance
     /**
      * 
      * @param string $log
-     * @return \Earls\FlamingoCommandQueue\Entity\FlgScriptInstance
+     * @return \Earls\FlamingoCommandQueueBundle\Entity\FlgScriptInstance
      */
     public function setLog($log)
     {
@@ -119,7 +124,7 @@ class FlgScriptInstance
     /**
      * 
      * @param int $duration
-     * @return \Earls\FlamingoCommandQueue\Entity\FlgScriptInstance
+     * @return \Earls\FlamingoCommandQueueBundle\Entity\FlgScriptInstance
      */
     public function setDuration($duration)
     {
@@ -130,7 +135,7 @@ class FlgScriptInstance
     /**
      * 
      * @param int $pendingDuration
-     * @return \Earls\FlamingoCommandQueue\Entity\FlgScriptInstance
+     * @return \Earls\FlamingoCommandQueueBundle\Entity\FlgScriptInstance
      */
     public function setPendingDuration($pendingDuration)
     {
@@ -140,8 +145,8 @@ class FlgScriptInstance
 
     /**
      * 
-     * @param \Earls\FlamingoCommandQueue\Entity\FlgScript $flgScript
-     * @return \Earls\FlamingoCommandQueue\Entity\FlgScriptInstance
+     * @param \Earls\FlamingoCommandQueueBundle\Entity\FlgScript $flgScript
+     * @return \Earls\FlamingoCommandQueueBundle\Entity\FlgScriptInstance
      */
     public function setFlgScript(FlgScript $flgScript)
     {

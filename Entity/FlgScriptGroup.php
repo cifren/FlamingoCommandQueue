@@ -1,9 +1,11 @@
 <?php
 
-namespace Earls\FlamingoCommandQueue\Entity;
+namespace Earls\FlamingoCommandQueueBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Earls\FlamingoCommandQueue\Entity\FlgScriptGroup
+ * Earls\FlamingoCommandQueueBundle\Entity\FlgScriptGroup
  * 
  * @ORM\Table(name="flg_script_group", indexes={@ORM\Index(name="name_idx", columns={"name"})})
  * @ORM\Entity
@@ -48,7 +50,7 @@ class FlgScriptGroup
     /**
      * 
      * @param string $name
-     * @return \Earls\FlamingoCommandQueue\Entity\FlgScriptGroup
+     * @return \Earls\FlamingoCommandQueueBundle\Entity\FlgScriptGroup
      */
     public function setName($name)
     {

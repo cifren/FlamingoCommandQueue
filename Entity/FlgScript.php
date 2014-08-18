@@ -1,11 +1,11 @@
 <?php
 
-namespace Earls\FlamingoCommandQueue\Entity;
+namespace Earls\FlamingoCommandQueueBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Earls\FlamingoCommandQueue\Entity\FlgScript
+ * Earls\FlamingoCommandQueueBundle\Entity\FlgScript
  * 
  * @ORM\Table(name="flg_script", indexes={@ORM\Index(name="sha_id_idx", columns={"sha_id"})})
  * @ORM\Entity
@@ -83,7 +83,7 @@ class FlgScript
     /**
      * 
      * @param string $shaId
-     * @return \Earls\FlamingoCommandQueue\Entity\FlgScript
+     * @return \Earls\FlamingoCommandQueueBundle\Entity\FlgScript
      */
     public function setShaId($shaId)
     {
@@ -94,7 +94,7 @@ class FlgScript
     /**
      * 
      * @param string $name
-     * @return \Earls\FlamingoCommandQueue\Entity\FlgScript
+     * @return \Earls\FlamingoCommandQueueBundle\Entity\FlgScript
      */
     public function setName($name)
     {
@@ -104,8 +104,8 @@ class FlgScript
 
     /**
      * 
-     * @param \Earls\FlamingoCommandQueue\Entity\FlgScriptGroup $flgScriptGroup
-     * @return \Earls\FlamingoCommandQueue\Entity\FlgScript
+     * @param \Earls\FlamingoCommandQueueBundle\Entity\FlgScriptGroup $flgScriptGroup
+     * @return \Earls\FlamingoCommandQueueBundle\Entity\FlgScript
      */
     public function setFlgScriptGroup(FlgScriptGroup $flgScriptGroup)
     {

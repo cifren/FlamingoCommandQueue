@@ -1,7 +1,15 @@
 <?php
 
-namespace Earls\FlamingoCommandQueue\Entity;
+namespace Earls\FlamingoCommandQueueBundle\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Earls\FlamingoCommandQueueBundle\Entity\FlgScriptCurrentStatus
+ * 
+ * @ORM\Table(name="flg_script_current_status")
+ * @ORM\Entity
+ */
 class FlgScriptCurrentStatus
 {
 
@@ -32,7 +40,7 @@ class FlgScriptCurrentStatus
     /**
      * @var FlgStatus flgStatus
      *
-     * @ORM\Column(name="pid", type="integer")
+     * @ORM\Column(name="status", type="integer")
      */
     protected $status;
 
@@ -65,8 +73,8 @@ class FlgScriptCurrentStatus
 
     /**
      * 
-     * @param \Earls\FlamingoCommandQueue\Entity\FlgScriptInstance $flgScriptInstance
-     * @return \Earls\FlamingoCommandQueue\Entity\FlgScriptCurrentStatus
+     * @param \Earls\FlamingoCommandQueueBundle\Entity\FlgScriptInstance $flgScriptInstance
+     * @return \Earls\FlamingoCommandQueueBundle\Entity\FlgScriptCurrentStatus
      */
     public function setFlgScriptInstance(FlgScriptInstance $flgScriptInstance)
     {
@@ -77,7 +85,7 @@ class FlgScriptCurrentStatus
     /**
      * 
      * @param integer $status
-     * @return \Earls\FlamingoCommandQueue\Entity\FlgScriptCurrentStatus
+     * @return \Earls\FlamingoCommandQueueBundle\Entity\FlgScriptCurrentStatus
      */
     public function setStatus($status)
     {
