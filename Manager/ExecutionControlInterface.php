@@ -1,13 +1,13 @@
 <?php
 
-namespace Earls\FlamingoCommandQueue\Manager;
+namespace Earls\FlamingoCommandQueueBundle\Manager;
 
 use Doctrine\ORM\EntityManager;
-use Earls\FlamingoCommandQueue\Model\FlgScriptStatus;
-use Earls\FlamingoCommandQueue\Entity\FlgScriptInstance;
+use Earls\FlamingoCommandQueueBundle\Model\FlgScriptStatus;
+use Earls\FlamingoCommandQueueBundle\Entity\FlgScriptInstance;
 
 /**
- * Earls\FlamingoCommandQueue\Manager\ExecutionControlInterface
+ * Earls\FlamingoCommandQueueBundle\Manager\ExecutionControlInterface
  */
 interface ExecutionControlInterface
 {
@@ -31,7 +31,7 @@ interface ExecutionControlInterface
     /**
      *
      * @param  \Doctrine\ORM\EntityManager              $entityManager
-     * @return \Earls\FlamingoCommandQueue\Manager\Pool
+     * @return \Earls\FlamingoCommandQueueBundle\Manager\Pool
      */
     public function setEntityManager(EntityManager $entityManager);
 

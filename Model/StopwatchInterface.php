@@ -1,9 +1,9 @@
 <?php
 
-namespace Earls\FlamingoCommandQueue\Model;
+namespace Earls\FlamingoCommandQueueBundle\Model;
 
 /**
- * Earls\FlamingoCommandQueue\Model\StopwatchInterface
+ * Earls\FlamingoCommandQueueBundle\Model\StopwatchInterface
  */
 interface StopwatchInterface
 {

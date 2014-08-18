@@ -1,7 +1,7 @@
 parameters:
-    flamingo.manager.command.class:     Earls\FlamingoCommandQueue\Manager\CommandManager
-    flamingo.execution.control.class:   Earls\FlamingoCommandQueue\Manager\ExecutionControl
-    flamingo.stopwatch.class:           Earls\FlamingoCommandQueue\Model\Stopwatch
+    flamingo.manager.command.class:     Earls\FlamingoCommandQueueBundle\Manager\CommandManager
+    flamingo.execution.control.class:   Earls\FlamingoCommandQueueBundle\Manager\ExecutionControl
+    flamingo.stopwatch.class:           Earls\FlamingoCommandQueueBundle\Model\Stopwatch
 
 services:
     flamingo.stopwatch:

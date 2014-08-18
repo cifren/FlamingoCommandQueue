@@ -1,6 +1,6 @@
 <?php
 
-namespace Earls\FlamingoCommandQueue\Model\Helper;
+namespace Earls\FlamingoCommandQueueBundle\Model\Helper;
 
 class IdCreatorHelper
 {

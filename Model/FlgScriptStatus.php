@@ -1,6 +1,6 @@
 <?php
 
-namespace Earls\FlamingoCommandQueue\Model;
+namespace Earls\FlamingoCommandQueueBundle\Model;
 
 class FlgScriptStatus
 {

@@ -1,16 +1,16 @@
 <?php
 
-namespace Earls\FlamingoCommandQueue\Manager;
+namespace Earls\FlamingoCommandQueueBundle\Manager;
 
 use Doctrine\ORM\EntityManager;
-use Earls\FlamingoCommandQueue\Entity\FlgScript;
-use Earls\FlamingoCommandQueue\Entity\FlgScriptInstance;
-use Earls\FlamingoCommandQueue\Entity\FlgScriptGroup;
-use Earls\FlamingoCommandQueue\Entity\FlgScriptCurrentStatus;
-use Earls\FlamingoCommandQueue\Model\FlgScriptStatus;
+use Earls\FlamingoCommandQueueBundle\Entity\FlgScript;
+use Earls\FlamingoCommandQueueBundle\Entity\FlgScriptInstance;
+use Earls\FlamingoCommandQueueBundle\Entity\FlgScriptGroup;
+use Earls\FlamingoCommandQueueBundle\Entity\FlgScriptCurrentStatus;
+use Earls\FlamingoCommandQueueBundle\Model\FlgScriptStatus;
 
 /**
- * Earls\FlamingoCommandQueue\Manager\ExecutionControl
+ * Earls\FlamingoCommandQueueBundle\Manager\ExecutionControl
  *
  * it is the control tower of the script instance
  */
@@ -43,7 +43,7 @@ class ExecutionControl implements ExecutionControlInterface
 
     protected function openScript($id, $name, $group = null)
     {
-        $flgScript = $this->getEntityManager->getRepository('Earls\FlamingoCommandQueue\Entity\FlgScript')->findByShaId($id);
+        $flgScript = $this->getEntityManager->getRepository('Earls\FlamingoCommandQueueBundle\Entity\FlgScript')->findByShaId($id);
 
         if (!$flgScript) {
             $flgScript = new FlgScript();
@@ -60,7 +60,7 @@ class ExecutionControl implements ExecutionControlInterface
 
     protected function openGroup($groupName = 'main')
     {
-        $flgScriptGroup = $this->getEntityManager->getRepository('Earls\FlamingoCommandQueue\Entity\FlgScript')->findByName($groupName);
+        $flgScriptGroup = $this->getEntityManager->getRepository('Earls\FlamingoCommandQueueBundle\Entity\FlgScript')->findByName($groupName);
 
         if (!$flgScriptGroup) {
             $flgScriptGroup = new FlgScriptGroup();
@@ -117,7 +117,7 @@ class ExecutionControl implements ExecutionControlInterface
     protected function isFirstInQueue(FlgScriptInstance $flgScriptInstance)
     {
         $isFirstInQueue = false;
-        $firstInQueue = $this->getEntityManager()->getRepository('Earls\FlamingoCommandQueue\Entity\FlgScriptInstance')->getFirstInQueue($flgScriptInstance->getFlgScript());
+        $firstInQueue = $this->getEntityManager()->getRepository('Earls\FlamingoCommandQueueBundle\Entity\FlgScriptInstance')->getFirstInQueue($flgScriptInstance->getFlgScript());
 
         if ($firstInQueue->getId() == $flgScriptInstance->getId()) {
             $isFirstInQueue = true;
@@ -129,7 +129,7 @@ class ExecutionControl implements ExecutionControlInterface
     protected function hasRunningInstance(FlgScriptInstance $flgScriptInstance)
     {
         $hasRunningInstance = true;
-        $runningInstance = $this->getEntityManager()->getRepository('Earls\FlamingoCommandQueue\Entity\FlgScriptInstance')->getRunningInstance($flgScriptInstance->getFlgScript());
+        $runningInstance = $this->getEntityManager()->getRepository('Earls\FlamingoCommandQueueBundle\Entity\FlgScriptInstance')->getRunningInstance($flgScriptInstance->getFlgScript());
 
         if (!$runningInstance) {
             $hasRunningInstance = false;
@@ -164,7 +164,7 @@ class ExecutionControl implements ExecutionControlInterface
 
     protected function isMaxPendingInstance(FlgScriptInstance $flgScriptInstance)
     {
-        $countPending = $this->getEntityManager()->getRepository('Earls\FlamingoCommandQueue\Entity\FlgScriptInstance')->getRunningInstance($flgScriptInstance->getFlgScript());
+        $countPending = $this->getEntityManager()->getRepository('Earls\FlamingoCommandQueueBundle\Entity\FlgScriptInstance')->getRunningInstance($flgScriptInstance->getFlgScript());
 
         return $countPending;
     }
@@ -203,7 +203,7 @@ class ExecutionControl implements ExecutionControlInterface
     /**
      *
      * @param  \Doctrine\ORM\EntityManager              $entityManager
-     * @return \Earls\FlamingoCommandQueue\Manager\Pool
+     * @return \Earls\FlamingoCommandQueueBundle\Manager\Pool
      */
     public function setEntityManager(EntityManager $entityManager)
     {

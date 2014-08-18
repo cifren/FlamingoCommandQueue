@@ -1,10 +1,10 @@
 <?php
 
-namespace Earls\FlamingoCommandQueue\Repository;
+namespace Earls\FlamingoCommandQueueBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
-use Earls\FlamingoCommandQueue\Entity\FlgScript;
-use Earls\FlamingoCommandQueue\Model\FlgScriptStatus;
+use Earls\FlamingoCommandQueueBundle\Entity\FlgScript;
+use Earls\FlamingoCommandQueueBundle\Model\FlgScriptStatus;
 
 class FlgScriptInstance extends EntityRepository
 {

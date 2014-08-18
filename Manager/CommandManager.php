@@ -1,12 +1,12 @@
 <?php
 
-namespace Earls\FlamingoCommandQueue\Manager;
+namespace Earls\FlamingoCommandQueueBundle\Manager;
 
 use Doctrine\ORM\EntityManager;
-use Earls\FlamingoCommandQueue\Model\Stopwatch;
+use Earls\FlamingoCommandQueueBundle\Model\Stopwatch;
 
 /**
- * Earls\FlamingoCommandQueue\Manager\CommandManager
+ * Earls\FlamingoCommandQueueBundle\Manager\CommandManager
  *
  * Manage only one instance of command, create a new object in order to manage more than one
  */
@@ -27,7 +27,7 @@ class CommandManager
 
     /**
      *
-     * @var \Earls\FlamingoCommandQueue\Entity\FlgScriptInstance
+     * @var \Earls\FlamingoCommandQueueBundle\Entity\FlgScriptInstance
      */
     protected $currentInstance;
 
@@ -154,7 +154,7 @@ class CommandManager
     /**
      *
      * @param  \Doctrine\ORM\EntityManager                        $entityManager
-     * @return \Earls\FlamingoCommandQueue\Manager\CommandManager
+     * @return \Earls\FlamingoCommandQueueBundle\Manager\CommandManager
      */
     public function setEntityManager(EntityManager $entityManager)
     {
