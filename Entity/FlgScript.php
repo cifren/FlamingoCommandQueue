@@ -8,8 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Earls\FlamingoCommandQueueBundle\Entity\FlgScript
  *
  * @ORM\Table(name="flg_script", indexes={
- *      @ORM\Index(name="group_sha_idx", columns={"group_sha"}),
- *      @ORM\Index(name="group_name_idx", columns={"group_name"})
+ *      @ORM\Index(name="name_idx", columns={"name"})
  * })
  * @ORM\Entity
  */

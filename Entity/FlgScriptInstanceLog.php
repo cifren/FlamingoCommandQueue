@@ -16,7 +16,7 @@ class FlgScriptInstanceLog
     /**
      * @var int $id
      *
-     * @ORM\Column(name="id", type="integer")
+     * @ORM\Column(name="id", type="bigint", options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -30,16 +30,16 @@ class FlgScriptInstanceLog
     protected $log;
 
     /**
-     * @var int $duration
+     * @var int $duration       The time (in milliseconds)
      *
-     * @ORM\Column(name="duration", type="integer")
+     * @ORM\Column(name="duration", type="bigint", options={"unsigned"=true}, nullable=true)
      */
     protected $duration;
 
     /**
-     * @var int $pendingDuration
+     * @var int $pendingDuration    The time (in milliseconds)
      *
-     * @ORM\Column(name="pending_duration", type="integer")
+     * @ORM\Column(name="pending_duration", type="bigint", options={"unsigned"=true}, nullable=true)
      */
     protected $pendingDuration;
 
@@ -52,6 +52,12 @@ class FlgScriptInstanceLog
 
     /**
      * @var integer flgStatus
+     * 
+     * Should use only :
+     *  - STATE_CANCELED
+     *  - STATE_FINISHED
+     *  - STATE_FAILED
+     *  - STATE_TERMINATED
      *
      * @ORM\Column(name="status", type="integer")
      */

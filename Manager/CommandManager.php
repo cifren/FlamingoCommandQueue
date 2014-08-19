@@ -73,7 +73,7 @@ class CommandManager
         if ($this->started) {
             throw new \Exception("The command has already been started");
         }
-        $this->executionControl->setConfig($this->getConfig());
+        $this->executionControl->setOptions($this->getOptions());
         $this->started = true;
         $this->setStartTime();
 
@@ -83,7 +83,7 @@ class CommandManager
         //authorization to run
         $this->setStartTime('pending');
         $this->executionControl->authorizeRunning($this->currentInstance);
-        $this->setStopTime('pending');
+        $this->setEndTime('pending');
     }
 
     public function stop(array $logs = null)
@@ -92,7 +92,8 @@ class CommandManager
             throw new \Exception("The command has already been stopped");
         }
         $this->stoped = true;
-
+        
+        $this->setEndTime();
         $this->executionControl->closeInstance($this->currentInstance, $logs, $this->getFinishTime(), $this->getFinishTime('pending'));
     }
 
@@ -130,8 +131,8 @@ class CommandManager
 
     /**
      *
-     * @param  string   $id
-     * @return interger
+     * @param  string       $id
+     * @return interger     The time (in milliseconds)
      */
     protected function getFinishTime($id = 'main')
     {

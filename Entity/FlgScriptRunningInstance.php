@@ -7,8 +7,10 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Earls\FlamingoCommandQueueBundle\Entity\FlgScriptRunningInstance
  *
- * @ORM\Table(name="flg_script_running_instance")
- * @ORM\Entity
+ * @ORM\Table(name="flg_script_running_instance", indexes={
+ *      @ORM\Index(name="group_sha_idx", columns={"group_sha"})
+ * })
+ * @ORM\Entity(repositoryClass="Earls\FlamingoCommandQueueBundle\Repository\FlgScriptRunningInstanceRepository")
  */
 class FlgScriptRunningInstance
 {
@@ -16,7 +18,7 @@ class FlgScriptRunningInstance
     /**
      * @var int $id
      *
-     * @ORM\Column(name="id", type="integer")
+     * @ORM\Column(name="id", type="bigint", options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -32,6 +34,10 @@ class FlgScriptRunningInstance
     /**
      * @var integer flgStatus
      *
+     * Should use only :
+     *  - STATE_PENDING
+     *  - STATE_RUNNING
+     * 
      * @ORM\Column(name="status", type="integer")
      */
     protected $status;
@@ -95,9 +101,9 @@ class FlgScriptRunningInstance
         return $this->flgScript;
     }
 
-    public function setPid($pid)
+    public function setPid()
     {
-        $this->pid = $pid;
+        $this->pid = posix_getpid();
 
         return $this;
     }
