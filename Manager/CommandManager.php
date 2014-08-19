@@ -68,7 +68,7 @@ class CommandManager
         $this->entityManager = $em;
     }
 
-    public function start($id, $name, $group = null)
+    public function start($name, $group = null)
     {
         if ($this->started) {
             throw new \Exception("The command has already been started");
@@ -78,7 +78,7 @@ class CommandManager
         $this->setStartTime();
 
         //create new instance
-        $this->currentInstance = $this->executionControl->openScriptInstance($id, $name, $group);
+        $this->currentInstance = $this->executionControl->createScriptRunningInstance($name, $group);
 
         //authorization to run
         $this->setStartTime('pending');
@@ -86,18 +86,14 @@ class CommandManager
         $this->setStopTime('pending');
     }
 
-    public function stop($logs = null)
+    public function stop(array $logs = null)
     {
         if ($this->stoped) {
             throw new \Exception("The command has already been stopped");
         }
         $this->stoped = true;
 
-        $this->currentInstance->setLog($logs);
-        $this->currentInstance->setDuration($this->getFinishTime());
-        $this->currentInstance->setPendingDuration($this->getFinishTime('pending'));
-
-        $this->executionControl->finish($this->currentInstance);
+        $this->executionControl->closeInstance($this->currentInstance, $logs, $this->getFinishTime(), $this->getFinishTime('pending'));
     }
 
     public function setMaxPendingInstance($maxInstance)
@@ -153,7 +149,7 @@ class CommandManager
 
     /**
      *
-     * @param  \Doctrine\ORM\EntityManager                        $entityManager
+     * @param  \Doctrine\ORM\EntityManager                              $entityManager
      * @return \Earls\FlamingoCommandQueueBundle\Manager\CommandManager
      */
     public function setEntityManager(EntityManager $entityManager)
@@ -163,12 +159,24 @@ class CommandManager
         return $this;
     }
 
-    public function getConfig()
+    public function getOptions()
     {
         return array(
             'maxPendingInstance' => $this->maxPendingInstance,
             'pendingLapsTime' => $this->pendingLapsTime
         );
+    }
+
+    public function setOptions(array $options)
+    {
+        if (isset($options['maxPendingInstance'])) {
+            $this->maxPendingInstance = $options['maxPendingInstance'];
+        }
+        if (isset($options['pendingLapsTime'])) {
+            $this->pendingLapsTime = $options['pendingLapsTime'];
+        }
+
+        return $this;
     }
 
 }

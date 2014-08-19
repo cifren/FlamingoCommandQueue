@@ -6,7 +6,7 @@ use Doctrine\ORM\EntityRepository;
 use Earls\FlamingoCommandQueueBundle\Entity\FlgScript;
 use Earls\FlamingoCommandQueueBundle\Model\FlgScriptStatus;
 
-class FlgScriptInstance extends EntityRepository
+class FlgScriptInstanceRepository extends EntityRepository
 {
 
     public function getFirstInQueue(FlgScript $flgScript)

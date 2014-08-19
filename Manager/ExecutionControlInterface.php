@@ -30,7 +30,7 @@ interface ExecutionControlInterface
 
     /**
      *
-     * @param  \Doctrine\ORM\EntityManager              $entityManager
+     * @param  \Doctrine\ORM\EntityManager                    $entityManager
      * @return \Earls\FlamingoCommandQueueBundle\Manager\Pool
      */
     public function setEntityManager(EntityManager $entityManager);
