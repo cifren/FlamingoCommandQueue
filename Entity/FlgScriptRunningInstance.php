@@ -8,7 +8,8 @@ use Doctrine\ORM\Mapping as ORM;
  * Earls\FlamingoCommandQueueBundle\Entity\FlgScriptRunningInstance
  *
  * @ORM\Table(name="flg_script_running_instance", indexes={
- *      @ORM\Index(name="group_sha_idx", columns={"group_sha"})
+ *      @ORM\Index(name="group_sha_idx", columns={"group_sha"}),
+ *      @ORM\Index(name="unique_sha_idx", columns={"unique_sha"})
  * })
  * @ORM\Entity(repositoryClass="Earls\FlamingoCommandQueueBundle\Repository\FlgScriptRunningInstanceRepository")
  */
@@ -43,18 +44,32 @@ class FlgScriptRunningInstance
     protected $status;
 
     /**
-     * @var string $shaId
+     * @var string $groupSha
      *
-     * @ORM\Column(name="group_sha", type="string", length=40)
+     * @ORM\Column(name="group_sha", type="string", length=40, nullable=true)
      */
     protected $groupSha;
 
     /**
-     * @var string $shaId
+     * @var string $groupName
      *
-     * @ORM\Column(name="group_name", type="string", length=255)
+     * @ORM\Column(name="group_name", type="string", length=255, nullable=true)
      */
     protected $groupName;
+
+    /**
+     * @var string $uniqueSha
+     *
+     * @ORM\Column(name="unique_sha", type="string", length=40, nullable=true)
+     */
+    protected $uniqueSha;
+
+    /**
+     * @var string $uniqueId
+     *
+     * @ORM\Column(name="unique_id", type="string", length=255, nullable=true)
+     */
+    protected $uniqueId;
 
     /**
      * @var \DateTime $createdAt
@@ -117,7 +132,10 @@ class FlgScriptRunningInstance
 
     public function setGroupSha($groupName)
     {
-        $this->groupSha = sha1($groupName);
+        $this->groupSha = null;
+        if ($groupName) {
+            $this->groupSha = sha1($groupName);
+        }
 
         return $this;
     }
@@ -146,6 +164,37 @@ class FlgScriptRunningInstance
         $this->createdAt = new \Datetime();
 
         return $this;
+    }
+
+    public function getUniqueSha()
+    {
+        return $this->uniqueSha;
+    }
+
+    public function getUniqueId()
+    {
+        return $this->uniqueId;
+    }
+
+    public function setUniqueSha($uniqueId)
+    {
+        $this->uniqueSha = null;
+        if ($uniqueId) {
+            $this->uniqueSha = sha1($uniqueId);
+        }
+
+        return $this;
+    }
+
+    public function setUniqueId($uniqueId)
+    {
+        $this->uniqueId = $uniqueId;
+        return $this;
+    }
+
+    public function hasUniqueId()
+    {
+        return $this->uniqueId ? true : false;
     }
 
 }

@@ -15,18 +15,6 @@ class CommandManager
 
     /**
      *
-     * @var integer
-     */
-    protected $maxPendingInstance = 30;
-
-    /**
-     * in second
-     * @var integer
-     */
-    protected $pendingLapsTime = 60;
-
-    /**
-     *
      * @var \Earls\FlamingoCommandQueueBundle\Entity\FlgScriptInstance
      */
     protected $currentInstance;
@@ -41,7 +29,7 @@ class CommandManager
      *
      * @var boolean
      */
-    protected $stoped = false;
+    protected $stopped = false;
 
     /**
      *
@@ -61,6 +49,12 @@ class CommandManager
      */
     protected $entityManager;
 
+    /**
+     *
+     * @var array 
+     */
+    protected $options;
+
     public function __construct(Stopwatch $stopWatch, ExecutionControl $executionControl, EntityManager $em)
     {
         $this->stopWatch = $stopWatch;
@@ -68,7 +62,7 @@ class CommandManager
         $this->entityManager = $em;
     }
 
-    public function start($name, $group = null)
+    public function start($name, $group = null, $queueUniqueId = null)
     {
         if ($this->started) {
             throw new \Exception("The command has already been started");
@@ -78,7 +72,7 @@ class CommandManager
         $this->setStartTime();
 
         //create new instance
-        $this->currentInstance = $this->executionControl->createScriptRunningInstance($name, $group);
+        $this->currentInstance = $this->executionControl->createScriptRunningInstance($name, $group, $queueUniqueId);
 
         //authorization to run
         $this->setStartTime('pending');
@@ -88,18 +82,13 @@ class CommandManager
 
     public function stop(array $logs = null)
     {
-        if ($this->stoped) {
+        if ($this->stopped) {
             throw new \Exception("The command has already been stopped");
         }
-        $this->stoped = true;
-        
+        $this->stopped = true;
+
         $this->setEndTime();
         $this->executionControl->closeInstance($this->currentInstance, $logs, $this->getFinishTime(), $this->getFinishTime('pending'));
-    }
-
-    public function setMaxPendingInstance($maxInstance)
-    {
-        $this->maxPendingInstance = $maxInstance;
     }
 
     /**
@@ -160,22 +149,22 @@ class CommandManager
         return $this;
     }
 
-    public function getOptions()
+    public function getDefaultOptions()
     {
         return array(
-            'maxPendingInstance' => $this->maxPendingInstance,
-            'pendingLapsTime' => $this->pendingLapsTime
+            'maxPendingInstance' => 30,
+            'pendingLapsTime' => 60
         );
+    }
+
+    public function getOptions()
+    {
+        return $this->options;
     }
 
     public function setOptions(array $options)
     {
-        if (isset($options['maxPendingInstance'])) {
-            $this->maxPendingInstance = $options['maxPendingInstance'];
-        }
-        if (isset($options['pendingLapsTime'])) {
-            $this->pendingLapsTime = $options['pendingLapsTime'];
-        }
+        $this->options = array_merge($this->getDefaultOptions(), $options);
 
         return $this;
     }

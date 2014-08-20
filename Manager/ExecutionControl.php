@@ -22,19 +22,6 @@ class ExecutionControl implements ExecutionControlInterface
      */
     protected $entityManager;
 
-    /**
-     *
-     * @var integer
-     */
-    protected $maxPendingInstance;
-
-    /**
-     * in second
-     *
-     * @var integer
-     */
-    protected $pendingLapsTime;
-
     public function __construct(EntityManager $entityManager)
     {
         $this->setEntityManager($entityManager);
@@ -53,7 +40,7 @@ class ExecutionControl implements ExecutionControlInterface
         return $flgScript;
     }
 
-    public function createScriptRunningInstance($name, $group = null)
+    public function createScriptRunningInstance($name, $group = null, $uniqueId = null)
     {
         $flgScript = $this->openScript($name);
 
@@ -63,6 +50,8 @@ class ExecutionControl implements ExecutionControlInterface
         $flgScriptRunningInstance->setPid();
         $flgScriptRunningInstance->setGroupName($group);
         $flgScriptRunningInstance->setGroupSha($group);
+        $flgScriptRunningInstance->setUniqueId($uniqueId);
+        $flgScriptRunningInstance->setUniqueSha($uniqueId);
         $flgScriptRunningInstance->setStatus(FlgScriptStatus::STATE_PENDING);
 
         $this->getEntityManager()->persist($flgScriptRunningInstance);
@@ -75,26 +64,19 @@ class ExecutionControl implements ExecutionControlInterface
     {
         $canRun = false;
 
-//        if (rand(1, 10) == 1) {
-//            die();
-//        }
-
         var_dump('authorizeRunning');
+
+        //can only have one instance with the same uniqueId pending, stop here if already one pending
+        if ($flgScriptRunningInstance->hasUniqueId()) {
+            $this->checkUniqueIdInstance($flgScriptRunningInstance);
+        }
         while (!$canRun) {
             $this->checkAndArchivePreviousBrokenInstance($flgScriptRunningInstance);
-            if (!$this->isFirstInQueue($flgScriptRunningInstance)) {
-                var_dump('not isFirstInQueue');
-                if ($this->isMaxPendingInstance($flgScriptRunningInstance)) {
-                    $this->throwMaxPendingInstanceError($flgScriptRunningInstance);
-                }
-            } else {
-                if (!$this->hasRunningInstance($flgScriptRunningInstance)) {
-                    $flgScriptRunningInstance->setStatus(FlgScriptStatus::STATE_RUNNING);
-                    $this->getEntityManager()->flush();
-                    $canRun = true;
-                    continue;
-                }
+
+            if ($canRun = $this->canRun($flgScriptRunningInstance)) {
+                continue;
             }
+
             $this->pendingProcess();
         }
     }
@@ -104,8 +86,57 @@ class ExecutionControl implements ExecutionControlInterface
         $this->archiveFinishedRunningInstance($flgScriptRunningInstance, $logs, $scriptTime, $pendingTime);
     }
 
+    protected function canRun(FlgScriptRunningInstance $flgScriptRunningInstance)
+    {
+        $canRun = false;
+
+        //in group
+        if ($flgScriptRunningInstance->getGroupName()) {
+            $canRun = $this->canRunWithinGroup($flgScriptRunningInstance);
+        } elseif ($flgScriptRunningInstance->getUniqueId()) { //if no group, no queue but still control uniqueId
+            $canRun = $this->canRunWithinUniqueId($flgScriptRunningInstance);
+        } else {//just log scripts
+            $this->run($flgScriptRunningInstance);
+            $canRun = true;
+        }
+
+        return $canRun;
+    }
+
+    protected function canRunWithinGroup(FlgScriptRunningInstance $flgScriptRunningInstance)
+    {
+        $canRun = false;
+
+        var_dump('canRunWithinGroup');
+        if ($this->isFirstInQueue($flgScriptRunningInstance)) {
+            if (!$this->hasGroupRunningInstance($flgScriptRunningInstance)) {
+                $this->run($flgScriptRunningInstance);
+                $canRun = true;
+            }
+        } else {
+            if ($this->isMaxPendingInstance($flgScriptRunningInstance)) {
+                $this->throwMaxPendingInstanceError($flgScriptRunningInstance);
+            }
+        }
+
+        return $canRun;
+    }
+
+    protected function canRunWithinUniqueId(FlgScriptRunningInstance $flgScriptRunningInstance)
+    {
+        $canRun = false;
+
+        if (!$this->hasUniqueRunningInstance($flgScriptRunningInstance)) {
+            $this->run($flgScriptRunningInstance);
+            $canRun = true;
+        }
+
+        return $canRun;
+    }
+
     protected function isFirstInQueue(FlgScriptRunningInstance $flgScriptRunningInstance)
     {
+        var_dump('isFirstInQueue');
         $isFirstInQueue = false;
         $firstInQueue = $this->getEntityManager()->getRepository('Earls\FlamingoCommandQueueBundle\Entity\FlgScriptRunningInstance')
                 ->getFirstInQueue($flgScriptRunningInstance->getGroupSha());
@@ -114,25 +145,34 @@ class ExecutionControl implements ExecutionControlInterface
             $isFirstInQueue = true;
         }
 
+        var_dump($isFirstInQueue);
         return $isFirstInQueue;
     }
 
-    protected function hasRunningInstance(FlgScriptRunningInstance $flgScriptRunningInstance)
+    protected function hasGroupRunningInstance(FlgScriptRunningInstance $flgScriptRunningInstance)
     {
         $runningInstances = $this->getEntityManager()->getRepository('Earls\FlamingoCommandQueueBundle\Entity\FlgScriptRunningInstance')
-                ->getRunningInstance($flgScriptRunningInstance->getGroupSha());
+                ->getRunningInstanceWithinGroup($flgScriptRunningInstance->getGroupSha());
+        return $this->hasRunningInstance($flgScriptRunningInstance, $runningInstances);
+    }
 
+    protected function hasUniqueRunningInstance(FlgScriptRunningInstance $flgScriptRunningInstance)
+    {
+        var_dump('hasGroupRunningInstance');
+        $runningInstances = $this->getEntityManager()->getRepository('Earls\FlamingoCommandQueueBundle\Entity\FlgScriptRunningInstance')
+                ->getRunningInstanceWithinUnique($flgScriptRunningInstance->getUniqueSha());
+        var_dump(count($runningInstances));
+
+        return $this->hasRunningInstance($flgScriptRunningInstance, $runningInstances);
+    }
+
+    protected function hasRunningInstance(FlgScriptRunningInstance $flgScriptRunningInstance, array $runningInstances = array())
+    {
+        var_dump('hasRunningInstance');
         $mainHasRunningInstance = false;
         $countRunningInstance = 0;
         foreach ($runningInstances as $runningInstance) {
-            $hasRunningInstance = true;
-            if (!$runningInstance) {
-                $hasRunningInstance = false;
-            } elseif (!$this->isStillAlive($runningInstance)) {
-                $this->archiveBrokenInstance($runningInstance);
-
-                $hasRunningInstance = false;
-            }
+            $hasRunningInstance = $this->isRunningInstance($runningInstance);
 
             //if one loop is true, all true (should not happen more than once, unless there is bug)
             if ($hasRunningInstance) {
@@ -144,7 +184,26 @@ class ExecutionControl implements ExecutionControlInterface
             $this->throwSimultaneousInstanceError($flgScriptRunningInstance);
         }
 
+        var_dump($mainHasRunningInstance);
         return $mainHasRunningInstance;
+    }
+
+    protected function isRunningInstance(FlgScriptRunningInstance $flgScriptRunningInstance)
+    {
+        $isRunningInstance = true;
+        if (!$this->isStillAlive($flgScriptRunningInstance)) {
+            $this->archiveBrokenInstance($flgScriptRunningInstance);
+
+            $isRunningInstance = false;
+        }
+
+        return $isRunningInstance;
+    }
+
+    public function run(FlgScriptRunningInstance $flgScriptRunningInstance)
+    {
+        $flgScriptRunningInstance->setStatus(FlgScriptStatus::STATE_RUNNING);
+        $this->getEntityManager()->flush();
     }
 
     public function fail(FlgScriptInstanceLog $flgScriptInstanceLog, $reason = null, $status = FlgScriptStatus::STATE_FAILED)
@@ -157,14 +216,10 @@ class ExecutionControl implements ExecutionControlInterface
 
     protected function isMaxPendingInstance(FlgScriptRunningInstance $flgScriptRunningInstance)
     {
-        var_dump("isMaxPendingInstance");
         $countPending = $this->getEntityManager()->getRepository('Earls\FlamingoCommandQueueBundle\Entity\FlgScriptRunningInstance')
                 ->getPendingInstance($flgScriptRunningInstance->getGroupSha());
 
-        var_dump('$countPending ' . count($countPending));
-        var_dump('maxPendingInstance ' . $this->maxPendingInstance);
-        var_dump(count($countPending) == $this->maxPendingInstance);
-        return count($countPending) > $this->maxPendingInstance;
+        return count($countPending) > $this->getOption('maxPendingInstance');
     }
 
     protected function checkAndArchivePreviousBrokenInstance(FlgScriptRunningInstance $flgScriptRunningInstance)
@@ -178,11 +233,24 @@ class ExecutionControl implements ExecutionControlInterface
         }
     }
 
+    protected function checkUniqueIdInstance(FlgScriptRunningInstance $flgScriptRunningInstance)
+    {
+        $this->checkAndArchivePreviousBrokenInstance($flgScriptRunningInstance);
+        
+        $instance = $this->getEntityManager()->getRepository('Earls\FlamingoCommandQueueBundle\Entity\FlgScriptRunningInstance')
+                ->getPendingInstanceWithSameUniqueId($flgScriptRunningInstance->getGroupSha(), $flgScriptRunningInstance->getUniqueSha());
+
+        if ($instance->getId() != $flgScriptRunningInstance->getId()) {
+            $this->throwPendingInstanceWithSameUniqueIdError($flgScriptRunningInstance);
+        }
+    }
+
     protected function isStillAlive(FlgScriptRunningInstance $flgScriptRunningInstance)
     {
         $isStillAlive = false;
         $pid = $flgScriptRunningInstance->getPid();
 
+        //works only for linux (of course)
         if (file_exists("/proc/$pid")) {
             $isStillAlive = true;
         }
@@ -235,6 +303,12 @@ class ExecutionControl implements ExecutionControlInterface
         $this->throwError($flgScriptRunningInstance, $message);
     }
 
+    protected function throwPendingInstanceWithSameUniqueIdError(FlgScriptRunningInstance $flgScriptRunningInstance)
+    {
+        $message = "Unique id is already used, no doubles accepted due to config options";
+        $this->throwError($flgScriptRunningInstance, $message);
+    }
+
     protected function throwError(FlgScriptRunningInstance $flgScriptRunningInstance, $message)
     {
         $this->archiveFailedInstance($flgScriptRunningInstance, $message, FlgScriptStatus::STATE_TERMINATED);
@@ -244,7 +318,7 @@ class ExecutionControl implements ExecutionControlInterface
 
     public function pendingProcess()
     {
-        sleep($this->pendingLapsTime);
+        sleep($this->getOption('pendingLapsTime'));
     }
 
     protected function createArchiveInstance(FlgScriptRunningInstance $flgScriptRunningInstance)
@@ -277,10 +351,20 @@ class ExecutionControl implements ExecutionControlInterface
         return $this;
     }
 
+    public function getOption($option)
+    {
+        if (isset($this->options[$option])) {
+            return $this->options[$option];
+        }
+
+        throw new \Exception("The option '$option' is missing");
+    }
+
     public function setOptions(array $options)
     {
-        $this->maxPendingInstance = $options['maxPendingInstance'];
-        $this->pendingLapsTime = $options['pendingLapsTime'];
+        $this->options = $options;
+
+        return $this->options;
     }
 
 }
