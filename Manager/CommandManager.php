@@ -67,7 +67,8 @@ class CommandManager
         if ($this->started) {
             throw new \Exception("The command has already been started");
         }
-        $this->executionControl->setOptions($this->getOptions());
+        $options = ($this->getOptions() == NULL ? array() : $this->getOptions());
+        $this->executionControl->setOptions($options);
         $this->started = true;
         $this->setStartTime();
 
