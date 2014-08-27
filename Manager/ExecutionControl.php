@@ -64,8 +64,6 @@ class ExecutionControl implements ExecutionControlInterface
     {
         $canRun = false;
 
-        var_dump('authorizeRunning');
-
         //can only have one instance with the same uniqueId pending, stop here if already one pending
         if ($flgScriptRunningInstance->hasUniqueId()) {
             $this->checkUniqueIdInstance($flgScriptRunningInstance);
