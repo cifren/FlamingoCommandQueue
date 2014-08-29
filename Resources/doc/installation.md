@@ -32,3 +32,15 @@ $bundles = array(
     // ...
 );
 ```
+
+Database
+========
+
+First you have to run `php app/console doctrine:schema:update --dump-sql` and create your tables `flg` from it
+
+3 tables are needed : FlgScript, FlgScriptInstanceLog and FlgScriptRunningInstance.
+
+###TIPS
+  If you don't see anything after doctrine:schema:update command, check if 
+  FlamingoCommandQueueBundle is a part of your dcctrine mappings in config.yml.
+

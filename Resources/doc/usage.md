@@ -1,8 +1,6 @@
 Usage Documentation
 ===================
 
-First you have to run `php app/console doctrine:schema:update --dump-sql` and create your tables `flg` from it
-
 Next it is a very simple process, the only you have to do is to call the start function when you start your script and stop function when your script is done.
 
 Log Command
