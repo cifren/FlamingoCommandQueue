@@ -1,13 +1,13 @@
 Installation
 ============
 
-* [Installation](https://github.com/earls/FlamingoCommandQueue/blob/master/Resources/doc/installation.md)
+* [Installation](installation.md)
 
 Usage Documentation
 ===================
 
-* [Usage](https://github.com/earls/FlamingoCommandQueue/blob/master/Resources/doc/usage.md)
-* [Interface](https://github.com/earls/FlamingoCommandQueue/blob/master/Resources/doc/interface.md)
+* [Usage](usage.md)
+* [Interface](interface.md)
 
 Theory
 ======

@@ -14,4 +14,4 @@ The idea is:
 Documentation
 =============
 
-For installation and how to use the bundle refer to [Resources/doc/index.md](https://github.com/Earls/FlamingoCommandQueue/blob/master/Resources/doc/index.md)
+For installation and how to use the bundle refer to [Resources/doc/index.md](index.md)

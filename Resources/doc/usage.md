@@ -54,14 +54,18 @@ class RunCommand extends ContainerAwareCommand
 
 ```
 
-Here the command manager will run and save all data in the Table. The logs will be store into an array in the entity `FlgScriptInstanceLog`.
+Here the command manager will run and save all data in the Table. The logs will be store 
+into an array in the entity `FlgScriptInstanceLog`.
 
-Why an array ? Because like this, you can retrieve all level of notification from symfony2, you could use into your command from [logger](http://symfony.com/fr/doc/current/cookbook/logging/monolog.html).
+Why an array ? Because like this, you can retrieve all level of notification from 
+symfony2, you could use into your command from 
+[logger](http://symfony.com/fr/doc/current/cookbook/logging/monolog.html).
 
 Queue
 =====
 
-You can line up a command in the entity/table `FlgScriptRunningInstance`, the thing you have to do is to declare a name of group.
+You can line up a command in the entity/table `FlgScriptRunningInstance`, the thing 
+you have to do is to declare a name of group.
 
 ```php 
 <?php
@@ -92,7 +96,8 @@ Unique Id
 =========
 
 You can as well specify a uniquId, this unique Id will make the command pending unique. 
-In case of another command from the same group has the same id, this command will stop running. In this case the other command stay unique.
+In case of another command from the same group has the same id, this command will stop 
+running. In this case the other command stay unique.
 
 
 ```php 
