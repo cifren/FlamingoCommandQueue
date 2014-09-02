@@ -2,7 +2,9 @@
 
 namespace Earls\FlamingoCommandQueueBundle\Model;
 
-class Stopwatch extends \Symfony\Component\Stopwatch\Stopwatch
+use Earls\FlamingoCommandQueueBundle\Model\StopwatchInterface;
+
+class Stopwatch extends \Symfony\Component\Stopwatch\Stopwatch implements StopwatchInterface
 {
 
     /**
