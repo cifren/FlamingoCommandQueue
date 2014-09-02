@@ -13,7 +13,7 @@ class Stopwatch extends \Symfony\Component\Stopwatch\Stopwatch implements Stopwa
      * 
      * @return \DateInterval
      */
-    protected function getFinishTime($name)
+    public function getFinishTime($name)
     {
         $seconds = round($this->getEvent($name)->getDuration() / 1000, 0);
 
