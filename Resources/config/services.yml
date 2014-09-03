@@ -1,7 +1,8 @@
 parameters:
-    flamingo.manager.command.class:     Earls\FlamingoCommandQueueBundle\Manager\CommandManager
-    flamingo.execution.control.class:   Earls\FlamingoCommandQueueBundle\Manager\ExecutionControl
-    flamingo.stopwatch.class:           Earls\FlamingoCommandQueueBundle\Model\Stopwatch
+    flamingo.manager.command.instance.class:      Earls\FlamingoCommandQueueBundle\Model\CommandManagerInstance
+    flamingo.manager.command.factory.class:       Earls\FlamingoCommandQueueBundle\Model\CommandManagerInstanceFactory
+    flamingo.execution.control.class:             Earls\FlamingoCommandQueueBundle\Model\ExecutionControl
+    flamingo.stopwatch.class:                     Earls\FlamingoCommandQueueBundle\Model\Stopwatch
 
 services:
     flamingo.stopwatch:
@@ -13,8 +14,11 @@ services:
             - "@doctrine.orm.entity_manager"
 
     flamingo.manager.command:
-        class:  %flamingo.manager.command.class%
+        class:  %flamingo.manager.command.instance.class%
+        factory_class:  "%flamingo.manager.command.factory.class%"
+        factory_method: get
+        scope: prototype
         arguments:
             - "@flamingo.stopwatch"
             - "@flamingo.execution.control"
-            - "@doctrine.orm.entity_manager"
+            - "@doctrine.orm.entity_manager"        
