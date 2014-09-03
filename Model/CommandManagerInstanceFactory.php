@@ -13,7 +13,7 @@ use Earls\FlamingoCommandQueueBundle\Model\Stopwatch;
 class CommandManagerInstanceFactory
 {
 
-    public function get(Stopwatch $stopWatch, ExecutionControl $executionControl, EntityManager $em)
+    static public function get(Stopwatch $stopWatch, ExecutionControl $executionControl, EntityManager $em)
     {
         return new CommandManagerInstance($stopWatch, $executionControl, $em);
     }
