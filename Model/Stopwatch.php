@@ -2,7 +2,9 @@
 
 namespace Earls\FlamingoCommandQueueBundle\Model;
 
-class Stopwatch extends \Symfony\Component\Stopwatch\Stopwatch
+use Earls\FlamingoCommandQueueBundle\Model\StopwatchInterface;
+
+class Stopwatch extends \Symfony\Component\Stopwatch\Stopwatch implements StopwatchInterface
 {
 
     /**
@@ -11,7 +13,7 @@ class Stopwatch extends \Symfony\Component\Stopwatch\Stopwatch
      * 
      * @return \DateInterval
      */
-    protected function getFinishTime($name)
+    public function getFinishTime($name)
     {
         $seconds = round($this->getEvent($name)->getDuration() / 1000, 0);
 
