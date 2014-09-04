@@ -14,4 +14,4 @@ The idea is:
 Documentation
 =============
 
-For installation and how to use the bundle refer to [Resources/doc/index.md](index.md)
+For installation and how to use the bundle refer to [Resources/doc/index.md](Resources/doc/index.md)
