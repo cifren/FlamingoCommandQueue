@@ -81,7 +81,7 @@ class CommandManagerInstance
         $this->setEndTime('pending');
     }
 
-    public function stop(array $logs = null)
+    public function stop(array $logs = null, $status = FlgScriptStatus::STATE_FINISHED)
     {
         if ($this->stopped) {
             throw new \Exception("The command has already been stopped");
@@ -89,7 +89,7 @@ class CommandManagerInstance
         $this->stopped = true;
 
         $this->setEndTime();
-        $this->executionControl->closeInstance($this->currentInstance, $logs, $this->getFinishTime(), $this->getFinishTime('pending'));
+        $this->executionControl->closeInstance($this->currentInstance, $logs, $this->getFinishTime(), $this->getFinishTime('pending'), $status);
     }
 
     /**

@@ -79,9 +79,9 @@ class ExecutionControl implements ExecutionControlInterface
         }
     }
 
-    public function closeInstance(FlgScriptRunningInstance $flgScriptRunningInstance, array $logs, $scriptTime, $pendingTime)
+    public function closeInstance(FlgScriptRunningInstance $flgScriptRunningInstance, array $logs, $scriptTime, $pendingTime, $status = FlgScriptStatus::STATE_FINISHED)
     {
-        $this->archiveFinishedRunningInstance($flgScriptRunningInstance, $logs, $scriptTime, $pendingTime);
+        $this->archiveFinishedRunningInstance($flgScriptRunningInstance, $logs, $scriptTime, $pendingTime, $status);
     }
 
     protected function canRun(FlgScriptRunningInstance $flgScriptRunningInstance)
@@ -256,13 +256,13 @@ class ExecutionControl implements ExecutionControlInterface
         return $isStillAlive;
     }
 
-    protected function archiveFinishedRunningInstance(FlgScriptRunningInstance $flgScriptRunningInstance, array $logs, $scriptTime, $pendingTime)
+    protected function archiveFinishedRunningInstance(FlgScriptRunningInstance $flgScriptRunningInstance, array $logs, $scriptTime, $pendingTime, $status = FlgScriptStatus::STATE_FINISHED)
     {
         $instanceLog = $this->createArchiveInstance($flgScriptRunningInstance);
         $instanceLog->setLog($logs);
         $instanceLog->setDuration($scriptTime);
         $instanceLog->setPendingDuration($pendingTime);
-        $instanceLog->setStatus(FlgScriptStatus::STATE_FINISHED);
+        $instanceLog->setStatus($status);
 
         $this->getEntityManager()->remove($flgScriptRunningInstance);
         $this->getEntityManager()->persist($instanceLog);
