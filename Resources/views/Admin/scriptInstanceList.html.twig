@@ -1,0 +1,9 @@
+{% extends base_template %}
+
+{% use 'EarlsFlamingoCommandQueueBundle:AdminBlocks:scriptInstanceListBlock.html.twig' %}
+
+{% block body %}
+  <a href="{{path('flg_admin_script_list')}}" class="btn btn-default">back to Script List</a>
+  {{ block('scriptInstanceList') }}
+{% endblock %}
+

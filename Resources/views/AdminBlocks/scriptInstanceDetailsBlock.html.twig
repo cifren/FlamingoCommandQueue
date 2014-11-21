@@ -1,0 +1,23 @@
+{% block scriptInstanceDetails %}
+  <div>
+    <h3>Log</h3>
+    <table class="table table-stripped">
+      <tr>
+        <th>Time</th>
+        <th>Message</th>
+      </tr>
+      {% for line in logs %}
+          <tr>
+            <td>
+              {% if line.timestamp == 0 %}
+                ...
+              {% else %}
+                {{line.timestamp|date('Y-m-d H:i:s')}}
+              {% endif %}
+            </td>
+            <td>{{line.message}}</td>
+          </tr>
+      {% endfor %}
+    </table>
+  </div>
+{% endblock %}

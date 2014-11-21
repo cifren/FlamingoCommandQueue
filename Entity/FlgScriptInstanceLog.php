@@ -30,14 +30,14 @@ class FlgScriptInstanceLog
     protected $log;
 
     /**
-     * @var int $duration       The time (in milliseconds)
+     * @var int $duration       The time (in milliseconds), time of the script lasted
      *
      * @ORM\Column(name="duration", type="bigint", options={"unsigned"=true}, nullable=true)
      */
     protected $duration;
 
     /**
-     * @var int $pendingDuration    The time (in milliseconds)
+     * @var int $pendingDuration    The time (in milliseconds), time of the script waited in the queue
      *
      * @ORM\Column(name="pending_duration", type="bigint", options={"unsigned"=true}, nullable=true)
      */

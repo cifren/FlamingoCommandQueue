@@ -33,10 +33,10 @@ class RunCommand extends ContainerAwareCommand
 
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $container = $this->getContainer();
         $cmdManager = $this->getContainer()->get('flamingo.manager.command');
-
-        $cmdManager->start($name);
+        
+        $scriptName = 'myOxpeckerRunCommand';
+        $cmdManager->start($scriptName);
 
         //******
         //your scripts, business logic
@@ -65,7 +65,7 @@ Queue
 =====
 
 You can line up a command in the entity/table `FlgScriptRunningInstance`, the thing 
-you have to do is to declare a name of group.
+you have to do is to declare a group's name.
 
 ```php 
 <?php
@@ -74,11 +74,11 @@ class RunCommand extends ContainerAwareCommand
 
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $container = $this->getContainer();
         $cmdManager = $this->getContainer()->get('flamingo.manager.command');
         
+        $scriptName = 'myOxpeckerRunCommand';
         $groupName = 'ninja';
-        $cmdManager->start($name, $groupName);
+        $cmdManager->start($scriptName, $groupName);
 
         //******
         //your scripts, business logic
@@ -90,14 +90,13 @@ class RunCommand extends ContainerAwareCommand
 }
 ```
 
-In this case, all commands running with the group 'ninja' will be following each other.
+In this case, all commands running with the group 'ninja' will be following each other, means all commands with same group's name will line up.
 
 Unique Id
 =========
 
 You can as well specify a uniquId, this unique Id will make the command pending unique. 
-In case of another command from the same group has the same id, this command will stop 
-running. In this case the other command stay unique.
+In case of another command from the same group has the same id in the queue, this command will canceled itself. In this case the other command stay unique.
 
 
 ```php 
@@ -107,12 +106,12 @@ class RunCommand extends ContainerAwareCommand
 
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $container = $this->getContainer();
         $cmdManager = $this->getContainer()->get('flamingo.manager.command');
         
+        $scriptName = 'myOxpeckerRunCommand';
         $groupName = 'ninja';
         $uniqueId = 'storeId=15';
-        $cmdManager->start($name, $groupName, $uniqueId);
+        $cmdManager->start($scriptName, $groupName, $uniqueId);
 
         //******
         //your scripts, business logic
@@ -139,3 +138,19 @@ The command will queue only one command with this Id, avoid repetition,
 if you add the command on web page and the command is ran several times per minutes
 or if the command is lasting slower than the time between 2 crons, your call, 
 or if you need a permanent execution etc...
+
+Entities
+========
+
+3 Entities exist :
+- FlgScript, give you the name of the command you ran.
+- FlgScriptInstanceLog, from FlgScript, the entity is the list of instance ran for FlgScript, you will find logs/duration/status/createdAt, it is the archive of your instance commands.
+- FlgScriptRunningInstance, from FlgScript, this entity give you the current status of the command.
+
+The list of status available in [FlgScriptStatus](../../Model/FlgScriptStatus.php) :
+- PENDING only available in FlgScriptRunningInstance
+- RUNNING only available in FlgScriptRunningInstance
+- CANCELED only available in FlgScriptInstanceLog
+- FINISHED only available in FlgScriptInstanceLog
+- FAILED only available in FlgScriptInstanceLog
+- TERMINATED only available in FlgScriptInstanceLog

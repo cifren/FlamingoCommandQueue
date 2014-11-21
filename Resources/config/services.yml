@@ -1,9 +1,12 @@
 parameters:
     flamingo.manager.command.instance.class:      Earls\FlamingoCommandQueueBundle\Model\CommandManagerInstance
     flamingo.manager.command.factory.class:       Earls\FlamingoCommandQueueBundle\Model\CommandManagerInstanceFactory
+    flamingo.manager.log.class:                   Earls\FlamingoCommandQueueBundle\Manager\LogManager
+    
     flamingo.execution.control.class:             Earls\FlamingoCommandQueueBundle\Model\ExecutionControl
     flamingo.stopwatch.class:                     Earls\FlamingoCommandQueueBundle\Model\Stopwatch
-
+    flamingo.admin.template:                      "EarlsFlamingoCommandQueueBundle::layout.html.twig"
+    
 services:
     flamingo.stopwatch:
         class:  %flamingo.stopwatch.class%
@@ -21,4 +24,9 @@ services:
         arguments:
             - "@flamingo.stopwatch"
             - "@flamingo.execution.control"
-            - "@doctrine.orm.entity_manager"        
+            - "@doctrine.orm.entity_manager"      
+    
+    flamingo.manager.log:
+        class: "%flamingo.manager.log.class%"
+
+  

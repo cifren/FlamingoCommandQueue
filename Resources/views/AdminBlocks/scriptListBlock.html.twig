@@ -1,0 +1,15 @@
+{% block scriptList %}
+  <h3>Script List</h3>
+  <table class="table">
+    <tr>
+      <th>Id</th>
+      <th>Name</th>
+    </tr>
+    {% for script in scripts %}
+      <tr>
+        <td><a href="{{path('flg_admin_script_instance_list', {flgScriptId: script.getId()})}}">{{ script.getId() }}</a></td>
+        <td>{{script.getName()}}</td>
+      </tr>
+    {% endfor %}
+  </table>
+{% endblock %}

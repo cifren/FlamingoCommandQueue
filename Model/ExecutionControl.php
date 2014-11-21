@@ -208,7 +208,7 @@ class ExecutionControl implements ExecutionControlInterface
     {
         $message = "This script has failed with the following output : " . ((!$reason) ? "No output given... not helpful !" : $reason);
 
-        $flgScriptInstanceLog->setLog($message);
+        $flgScriptInstanceLog->setLog(array($message));
         $flgScriptInstanceLog->setStatus($status);
     }
 

@@ -32,4 +32,16 @@ class FlgScriptStatus
     /** State if job exceeds its configured maximum runtime. */
     const STATE_TERMINATED = 6;
 
+    public static function getStatusList()
+    {
+        return array(
+            self::STATE_PENDING => 'pending',
+            self::STATE_CANCELED => 'canceled',
+            self::STATE_RUNNING => 'runing',
+            self::STATE_FINISHED => 'finished',
+            self::STATE_FAILED => 'failed',
+            self::STATE_TERMINATED => 'terminated',
+        );
+    }
+
 }

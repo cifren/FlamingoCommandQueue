@@ -26,5 +26,10 @@ Improvements
 ============
 
 To Do :
-    - create interface (run command from interface, watch actual command status, see historic...)
+    - create interface :
+        * run command from interface
+        * watch actual command status
+        * see historic
+        * create dashboard with running script, last executed script, last crashed script
     - dependencies between commands, when start
+    

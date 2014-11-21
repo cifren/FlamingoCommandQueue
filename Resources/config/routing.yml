@@ -1,0 +1,11 @@
+flg_admin_script_list:
+    pattern: /script_list
+    defaults: { _controller: EarlsFlamingoCommandQueueBundle:Admin:scriptList }
+    
+flg_admin_script_instance_list:
+    pattern: /script_instance_list/{flgScriptId}
+    defaults: { _controller: EarlsFlamingoCommandQueueBundle:Admin:scriptInstanceList }
+    
+flg_admin_script_instance_details:
+    pattern: /script_instance_details/{flgScriptInstanceId}
+    defaults: { _controller: EarlsFlamingoCommandQueueBundle:Admin:scriptInstanceDetails }
