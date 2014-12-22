@@ -33,6 +33,6 @@ class Stopwatch extends \Symfony\Component\Stopwatch\Stopwatch implements Stopwa
             return $this->events[$name];
         }
         
-        throw new Exception('ERROR: Event does not exists');
+        throw new \Exception('ERROR: Event does not exists');
     }
 }
