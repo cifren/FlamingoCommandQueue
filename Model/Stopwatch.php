@@ -28,9 +28,11 @@ class Stopwatch extends \Symfony\Component\Stopwatch\Stopwatch implements Stopwa
 
     public function getEvent($name)
     {
-        if(isset($this->events[$name])){
+        $current = end($this->activeSections);
+        $events = $this->getSectionEvents($current->getId());
+        if(isset($events[$name])){
             
-            return $this->events[$name];
+            return $events[$name];
         }
         
         throw new \Exception('ERROR: Event does not exists');
