@@ -26,6 +26,7 @@ class Stopwatch extends \Symfony\Component\Stopwatch\Stopwatch implements Stopwa
         return $duration;
     }
 
+    /*
     public function getEvent($name)
     {
         $events = end($this->activeSections);
@@ -36,4 +37,5 @@ class Stopwatch extends \Symfony\Component\Stopwatch\Stopwatch implements Stopwa
 
         return $events[$name];
     }
+    */
 }
