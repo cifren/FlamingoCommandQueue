@@ -7,6 +7,7 @@ use Earls\FlamingoCommandQueueBundle\Entity\FlgScript;
 use Earls\FlamingoCommandQueueBundle\Entity\FlgScriptInstanceLog;
 use Earls\FlamingoCommandQueueBundle\Entity\FlgScriptRunningInstance;
 use Earls\FlamingoCommandQueueBundle\Model\FlgScriptStatus;
+use Earls\FlamingoCommandQueueBundle\Manager\LogManager;
 
 /**
  * Earls\FlamingoCommandQueueBundle\Model\ExecutionControl
@@ -22,9 +23,30 @@ class ExecutionControl implements ExecutionControlInterface
      */
     protected $entityManager;
 
-    public function __construct(EntityManager $entityManager)
+    /**
+     *
+     * @var string 
+     */
+    protected $logLimitStatus;
+
+    /**
+     *
+     * @var int 
+     */
+    protected $logLimitLine;
+
+    /**
+     *
+     * @var LogManager
+     */
+    protected $logManager;
+
+    public function __construct(EntityManager $entityManager, $logLimitLine, $logLimitStatus, LogManager $logManager)
     {
         $this->setEntityManager($entityManager);
+        $this->logLimitStatus = $logLimitStatus;
+        $this->logLimitLine = $logLimitLine;
+        $this->logManager = $logManager;
     }
 
     protected function openScript($name)
@@ -105,7 +127,6 @@ class ExecutionControl implements ExecutionControlInterface
     {
         $canRun = false;
 
-        var_dump('canRunWithinGroup');
         if ($this->isFirstInQueue($flgScriptRunningInstance)) {
             if (!$this->hasGroupRunningInstance($flgScriptRunningInstance)) {
                 $this->run($flgScriptRunningInstance);
@@ -134,7 +155,6 @@ class ExecutionControl implements ExecutionControlInterface
 
     protected function isFirstInQueue(FlgScriptRunningInstance $flgScriptRunningInstance)
     {
-        var_dump('isFirstInQueue');
         $isFirstInQueue = false;
         $firstInQueue = $this->getEntityManager()->getRepository('Earls\FlamingoCommandQueueBundle\Entity\FlgScriptRunningInstance')
                 ->getFirstInQueue($flgScriptRunningInstance->getGroupSha());
@@ -143,7 +163,6 @@ class ExecutionControl implements ExecutionControlInterface
             $isFirstInQueue = true;
         }
 
-        var_dump($isFirstInQueue);
         return $isFirstInQueue;
     }
 
@@ -156,17 +175,14 @@ class ExecutionControl implements ExecutionControlInterface
 
     protected function hasUniqueRunningInstance(FlgScriptRunningInstance $flgScriptRunningInstance)
     {
-        var_dump('hasGroupRunningInstance');
         $runningInstances = $this->getEntityManager()->getRepository('Earls\FlamingoCommandQueueBundle\Entity\FlgScriptRunningInstance')
                 ->getRunningInstanceWithinUnique($flgScriptRunningInstance->getUniqueSha());
-        var_dump(count($runningInstances));
 
         return $this->hasRunningInstance($flgScriptRunningInstance, $runningInstances);
     }
 
     protected function hasRunningInstance(FlgScriptRunningInstance $flgScriptRunningInstance, array $runningInstances = array())
     {
-        var_dump('hasRunningInstance');
         $mainHasRunningInstance = false;
         $countRunningInstance = 0;
         foreach ($runningInstances as $runningInstance) {
@@ -182,7 +198,6 @@ class ExecutionControl implements ExecutionControlInterface
             $this->throwSimultaneousInstanceError($flgScriptRunningInstance);
         }
 
-        var_dump($mainHasRunningInstance);
         return $mainHasRunningInstance;
     }
 
@@ -234,7 +249,7 @@ class ExecutionControl implements ExecutionControlInterface
     protected function checkUniqueIdInstance(FlgScriptRunningInstance $flgScriptRunningInstance)
     {
         $this->checkAndArchivePreviousBrokenInstance($flgScriptRunningInstance);
-        
+
         $instance = $this->getEntityManager()->getRepository('Earls\FlamingoCommandQueueBundle\Entity\FlgScriptRunningInstance')
                 ->getPendingInstanceWithSameUniqueId($flgScriptRunningInstance->getGroupSha(), $flgScriptRunningInstance->getUniqueSha());
 
@@ -259,7 +274,8 @@ class ExecutionControl implements ExecutionControlInterface
     protected function archiveFinishedRunningInstance(FlgScriptRunningInstance $flgScriptRunningInstance, array $logs, $scriptTime, $pendingTime, $status = FlgScriptStatus::STATE_FINISHED)
     {
         $instanceLog = $this->createArchiveInstance($flgScriptRunningInstance);
-        $instanceLog->setLog($logs);
+        $filtereLogs = $this->filterLogs($logs);
+        $instanceLog->setLog($filtereLogs);
         $instanceLog->setDuration($scriptTime);
         $instanceLog->setPendingDuration($pendingTime);
         $instanceLog->setStatus($status);
@@ -363,6 +379,26 @@ class ExecutionControl implements ExecutionControlInterface
         $this->options = $options;
 
         return $this->options;
+    }
+
+    protected function filterLogs(array $logs)
+    {
+        $logManager = $this->getLogManager();
+        $filteredStatusLogs = $logManager->getSpecificLogs($logs, $this->logLimitStatus);
+        
+        if ($this->logLimitLine !== 0) {
+            $filteredLineLogs = array_slice($filteredStatusLogs, ($this->logLimitLine+1) * -1);
+            $filteredLogs = $filteredLineLogs;
+        } else {
+            $filteredLogs = $filteredStatusLogs;
+        }
+
+        return $filteredLogs;
+    }
+
+    protected function getLogManager()
+    {
+        return $this->logManager;
     }
 
 }

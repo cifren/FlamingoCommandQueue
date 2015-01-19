@@ -6,15 +6,23 @@ parameters:
     flamingo.execution.control.class:             Earls\FlamingoCommandQueueBundle\Model\ExecutionControl
     flamingo.stopwatch.class:                     Earls\FlamingoCommandQueueBundle\Model\Stopwatch
     flamingo.admin.template:                      "EarlsFlamingoCommandQueueBundle::layout.html.twig"
+    flamingo.log.save.limit:                      0
+    flamingo.log.save.status:                     "NOTICE"
     
 services:
     flamingo.stopwatch:
         class:  %flamingo.stopwatch.class%
+    
+    flamingo.manager.log:
+        class: "%flamingo.manager.log.class%"
 
     flamingo.execution.control:
         class:  %flamingo.execution.control.class%
         arguments:
-            - "@doctrine.orm.entity_manager"
+            - "@doctrine.orm.entity_manager"   
+            - "%flamingo.log.save.limit%"
+            - "%flamingo.log.save.status%"
+            - "@flamingo.manager.log"
 
     flamingo.manager.command:
         class:  %flamingo.manager.command.instance.class%
@@ -24,9 +32,8 @@ services:
         arguments:
             - "@flamingo.stopwatch"
             - "@flamingo.execution.control"
-            - "@doctrine.orm.entity_manager"      
+            - "@doctrine.orm.entity_manager" 
+      
     
-    flamingo.manager.log:
-        class: "%flamingo.manager.log.class%"
 
   
