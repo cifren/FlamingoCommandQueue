@@ -6,7 +6,7 @@ parameters:
     flamingo.execution.control.class:             Earls\FlamingoCommandQueueBundle\Model\ExecutionControl
     flamingo.stopwatch.class:                     Earls\FlamingoCommandQueueBundle\Model\Stopwatch
     flamingo.admin.template:                      "EarlsFlamingoCommandQueueBundle::layout.html.twig"
-    flamingo.log.save.limit:                      20000
+    flamingo.log.save.limit:                      2000
     flamingo.log.save.status:                     "NOTICE"
     
 services:
