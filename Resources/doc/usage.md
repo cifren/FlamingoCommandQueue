@@ -61,6 +61,19 @@ Why an array ? Because like this, you can retrieve all level of notification fro
 symfony2, you could use into your command from 
 [logger](http://symfony.com/fr/doc/current/cookbook/logging/monolog.html).
 
+###TIPS
+
+This tool use monolog in order to catch the logs into the database
+In dev the system the debug are active, but not in prod so $this->getContainer()->get('logger')->getLogs() will be an empty array
+In your monolog config (config_prod.yml) you can add 
+```yml
+    monolog:
+    handlers:
+        array:
+            type: debug     #will call the handler
+            level: notice   #will pass only notice level message, light weight logs
+
+
 Queue
 =====
 
