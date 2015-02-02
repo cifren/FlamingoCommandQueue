@@ -31,7 +31,11 @@ class LogManager
     public function getSpecificLogs(array $logs, $type = 'NOTICE')
     {
         $logs = array_filter($logs, function($var)use($type) {
-            return $var['priorityName'] == $type;
+            if (isset($var['priorityName'])) {
+                return $var['priorityName'] == $type;
+            }
+
+            return true;
         });
 
         return $logs;

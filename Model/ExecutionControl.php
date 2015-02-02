@@ -223,7 +223,16 @@ class ExecutionControl implements ExecutionControlInterface
     {
         $message = "This script has failed with the following output : " . ((!$reason) ? "No output given... not helpful !" : $reason);
 
-        $flgScriptInstanceLog->setLog(array($message));
+        //copy from Symfony\Bridge\Monolog\Handler\DebugHandler::getLogs()
+        $records[] = array(
+                'timestamp'    => time(),
+                'message'      => $message,
+                'priority'     => 250,
+                'priorityName' => "NOTICE",
+                'context'      => null,
+            );
+        
+        $flgScriptInstanceLog->setLog($records);
         $flgScriptInstanceLog->setStatus($status);
     }
 
