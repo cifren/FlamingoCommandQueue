@@ -232,6 +232,10 @@ class ExecutionControl implements ExecutionControlInterface
                 'context'      => null,
             );
         
+        //keep previous logs
+        if($flgScriptInstanceLog->getLog()){
+            $records = array_merge($flgScriptInstanceLog->getLog(), $records);
+        }
         $flgScriptInstanceLog->setLog($records);
         $flgScriptInstanceLog->setStatus($status);
     }
@@ -314,6 +318,12 @@ class ExecutionControl implements ExecutionControlInterface
         $this->getEntityManager()->flush();
     }
 
+    public function saveProgress(FlgScriptRunningInstance $flgScriptRunningInstance, array $logs)
+    {
+        $flgScriptRunningInstance->setLog($logs);
+        $this->getEntityManager()->flush($flgScriptRunningInstance);
+    }
+
     protected function throwMaxPendingInstanceError(FlgScriptRunningInstance $flgScriptRunningInstance)
     {
         $message = "You reach the limit of pending instance possible, you can increase this value in your config";
@@ -348,6 +358,7 @@ class ExecutionControl implements ExecutionControlInterface
     {
         $flgScriptInstanceLog = new FlgScriptInstanceLog();
         $flgScriptInstanceLog->setCreatedAt();
+        $flgScriptInstanceLog->setLog($flgScriptRunningInstance->getLog());
         $flgScriptInstanceLog->setFlgScript($flgScriptRunningInstance->getFlgScript());
 
         return $flgScriptInstanceLog;

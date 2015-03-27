@@ -92,6 +92,11 @@ class CommandManagerInstance
         $this->executionControl->closeInstance($this->currentInstance, $logs, $this->getFinishTime(), $this->getFinishTime('pending'), $status);
     }
 
+    public function saveProgress(array $logs)
+    {
+        $this->executionControl->saveProgress($this->currentInstance, $logs);
+    }
+
     /**
      *
      * @return Stopwatch

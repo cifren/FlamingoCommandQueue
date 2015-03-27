@@ -44,6 +44,13 @@ class FlgScriptRunningInstance
     protected $status;
 
     /**
+     * @var string $log
+     *
+     * @ORM\Column(name="log", type="array")
+     */
+    protected $log;
+
+    /**
      * @var string $groupSha
      *
      * @ORM\Column(name="group_sha", type="string", length=40, nullable=true)
@@ -195,6 +202,17 @@ class FlgScriptRunningInstance
     public function hasUniqueId()
     {
         return $this->uniqueId ? true : false;
+    }
+
+    public function getLog()
+    {
+        return $this->log;
+    }
+
+    public function setLog($log)
+    {
+        $this->log = $log;
+        return $this;
     }
 
 }
