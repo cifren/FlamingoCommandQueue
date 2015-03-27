@@ -15,7 +15,7 @@
                 {{line.timestamp|date('Y-m-d H:i:s')}}
               {% endif %}
             </td>
-            <td>{{line.message}}</td>
+            <td>{{line.message|nl2br}}</td>
           </tr>
       {% endfor %}
     </table>
