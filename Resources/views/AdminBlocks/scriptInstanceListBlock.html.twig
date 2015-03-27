@@ -3,12 +3,14 @@
   <table class="table">
     <tr>
       <th>Id</th>
+      <th>Datetime</th>
       <th>Duration</th>
       <th>Status</th>
     </tr>
     {% for scriptInstance in scriptInstances %}
       <tr>
         <td><a href="{{path('flg_admin_script_instance_details', {flgScriptInstanceId: scriptInstance.getId()})}}">{{scriptInstance.getId()}}</a></td>
+        <td>{{scriptInstance.getCreatedAt()|date('Y-m-d H:i:s')}}</td>
         <td>{{scriptInstance.getDuration()}} ms</td>
         <td>{{ instanceStatus[scriptInstance.getStatus()]}}</td>
       </tr>
