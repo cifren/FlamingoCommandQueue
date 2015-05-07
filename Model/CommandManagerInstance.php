@@ -53,7 +53,7 @@ class CommandManagerInstance
      *
      * @var array 
      */
-    protected $options;
+    protected $options = array();
 
     public function __construct(Stopwatch $stopWatch, ExecutionControl $executionControl, EntityManager $em)
     {
@@ -67,8 +67,8 @@ class CommandManagerInstance
         if ($this->started) {
             throw new \Exception("The command has already been started");
         }
-        $options = ($this->getOptions() == NULL ? array() : $this->getOptions());
-        $this->executionControl->setOptions($options);
+        
+        $this->executionControl->setOptions($this->getOptions());
         $this->started = true;
         $this->setStartTime();
 
@@ -165,6 +165,10 @@ class CommandManagerInstance
 
     public function getOptions()
     {
+        if (empty($this->options)) {
+            $this->options = $this->getDefaultOptions();
+        }
+
         return $this->options;
     }
 
