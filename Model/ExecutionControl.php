@@ -134,7 +134,7 @@ class ExecutionControl implements ExecutionControlInterface
             }
         } else {
             if ($this->isMaxPendingInstance($flgScriptRunningInstance)) {
-                $this->throwMaxPendingInstanceError($flgScriptRunningInstance);
+                $this->archiveFailedInstance($flgScriptRunningInstance, 'You reach the limit of pending instance possible, you can increase this value in your config', FlgScriptStatus::STATE_TERMINATED);
             }
         }
 
@@ -195,7 +195,7 @@ class ExecutionControl implements ExecutionControlInterface
             }
         }
         if ($countRunningInstance > 1) {
-            $this->throwSimultaneousInstanceError($flgScriptRunningInstance);
+            $this->archiveFailedInstance($flgScriptRunningInstance, 'Simultaneous running process, this should not happen', FlgScriptStatus::STATE_TERMINATED);
         }
 
         return $mainHasRunningInstance;
@@ -221,7 +221,7 @@ class ExecutionControl implements ExecutionControlInterface
 
     public function fail(FlgScriptInstanceLog $flgScriptInstanceLog, $reason = null, $status = FlgScriptStatus::STATE_FAILED)
     {
-        $message = "This script has failed with the following output : " . ((!$reason) ? "No output given... not helpful !" : $reason);
+        $message = "This script has stopped with the following output : " . ((!$reason) ? "No output given... not helpful !" : $reason);
 
         //copy from Symfony\Bridge\Monolog\Handler\DebugHandler::getLogs()
         $records[] = array(
@@ -267,7 +267,7 @@ class ExecutionControl implements ExecutionControlInterface
                 ->getPendingInstanceWithSameUniqueId($flgScriptRunningInstance->getGroupSha(), $flgScriptRunningInstance->getUniqueSha());
 
         if ($instance->getId() != $flgScriptRunningInstance->getId()) {
-            $this->throwPendingInstanceWithSameUniqueIdError($flgScriptRunningInstance);
+            $this->archiveFailedInstance($flgScriptRunningInstance, 'Unique id is already used, no doubles accepted due to config options', FlgScriptStatus::STATE_TERMINATED);
         }
     }
 
@@ -322,24 +322,6 @@ class ExecutionControl implements ExecutionControlInterface
     {
         $flgScriptRunningInstance->setLog($logs);
         $this->getEntityManager()->flush($flgScriptRunningInstance);
-    }
-
-    protected function throwMaxPendingInstanceError(FlgScriptRunningInstance $flgScriptRunningInstance)
-    {
-        $message = "You reach the limit of pending instance possible, you can increase this value in your config";
-        $this->throwError($flgScriptRunningInstance, $message);
-    }
-
-    protected function throwSimultaneousInstanceError(FlgScriptRunningInstance $flgScriptRunningInstance)
-    {
-        $message = "Simultaneous running process, this should not happen";
-        $this->throwError($flgScriptRunningInstance, $message);
-    }
-
-    protected function throwPendingInstanceWithSameUniqueIdError(FlgScriptRunningInstance $flgScriptRunningInstance)
-    {
-        $message = "Unique id is already used, no doubles accepted due to config options";
-        $this->throwError($flgScriptRunningInstance, $message);
     }
 
     protected function throwError(FlgScriptRunningInstance $flgScriptRunningInstance, $message)
