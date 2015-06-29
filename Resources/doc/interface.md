@@ -1,6 +1,3 @@
-Interface
-=========
-
 Add in your src/app/routing.yml
 
 ```yml
