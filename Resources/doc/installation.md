@@ -1,3 +1,6 @@
+Installation
+============
+
 Add the bunde to your `composer.json` file:
 ```javascript
 require: {

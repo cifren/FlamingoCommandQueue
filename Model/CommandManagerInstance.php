@@ -4,6 +4,7 @@ namespace Earls\FlamingoCommandQueueBundle\Model;
 
 use Doctrine\ORM\EntityManager;
 use Earls\FlamingoCommandQueueBundle\Model\Stopwatch;
+use Earls\FlamingoCommandQueueBundle\Model\FlgCommand;
 
 /**
  * Earls\FlamingoCommandQueueBundle\Model\CommandManagerInstance
@@ -55,6 +56,12 @@ class CommandManagerInstance
      */
     protected $options = array();
 
+    /**
+     *
+     * @var FlgCommand 
+     */
+    protected $flgCOmmand;
+
     public function __construct(Stopwatch $stopWatch, ExecutionControl $executionControl, EntityManager $em)
     {
         $this->stopWatch = $stopWatch;
@@ -62,18 +69,17 @@ class CommandManagerInstance
         $this->entityManager = $em;
     }
 
-    public function start($name, $group = null, $queueUniqueId = null)
+    public function start($name, FlgCommand $flgCommand)
     {
         if ($this->started) {
             throw new \Exception("The command has already been started");
         }
-        
+
         $this->executionControl->setOptions($this->getOptions());
         $this->started = true;
         $this->setStartTime();
 
-        //create new instance
-        $this->currentInstance = $this->executionControl->createScriptRunningInstance($name, $group, $queueUniqueId);
+        $this->currentInstance = $this->currentInstance->openInstance($name, $flgCommand);
 
         //authorization to run
         $this->setStartTime('pending');
@@ -89,7 +95,7 @@ class CommandManagerInstance
         $this->stopped = true;
 
         $this->setEndTime();
-        $this->executionControl->closeInstance($this->currentInstance, $logs, $this->getFinishTime(), $this->getFinishTime('pending'), $status);
+        $this->executionControl->closeInstance($this->currentInstance, $logs, $this->getFinishTime(), $this->getFinishTime('pending'), $status, $this->flgCOmmand->getArchiveEnable());
     }
 
     public function saveProgress(array $logs)
@@ -158,8 +164,8 @@ class CommandManagerInstance
     public function getDefaultOptions()
     {
         return array(
-            'maxPendingInstance' => 30,
-            'pendingLapsTime' => 60
+            'maxPendingInstance' => $this->flgCOmmand->getMaxPendingInstance(),
+            'pendingLapsTime' => $this->flgCOmmand->getPendingLapsTime(),
         );
     }
 

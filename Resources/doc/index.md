@@ -8,6 +8,7 @@ Usage Documentation
 
 * [Usage](usage.md)
 * [Interface](interface.md)
+* [Command Options](commandOptions.md)
 
 Theory
 ======

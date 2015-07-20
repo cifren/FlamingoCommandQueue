@@ -8,6 +8,7 @@ use Earls\FlamingoCommandQueueBundle\Entity\FlgScriptInstanceLog;
 use Earls\FlamingoCommandQueueBundle\Entity\FlgScriptRunningInstance;
 use Earls\FlamingoCommandQueueBundle\Model\FlgScriptStatus;
 use Earls\FlamingoCommandQueueBundle\Manager\LogManager;
+use Earls\FlamingoCommandQueueBundle\Entity\FlgWatchScript;
 
 /**
  * Earls\FlamingoCommandQueueBundle\Model\ExecutionControl
@@ -49,7 +50,46 @@ class ExecutionControl implements ExecutionControlInterface
         $this->logManager = $logManager;
     }
 
-    protected function openScript($name)
+    public function openInstance($name, FlgCommand $flgCommand)
+    {
+        $flgScript = $this->getScript($name);
+
+        //create new instance
+        $currentInstance = $this->createScriptRunningInstance($name, $flgCommand->getGroupName(), $flgCommand->getUniqueId(), $flgScript);
+
+        //create a scriptWatcher if references exist
+        $this->createScriptWatcher($name, $currentInstance, $flgCommand->getWatchScriptReferences());
+
+        return $currentInstance;
+    }
+
+    protected function createScriptWatcher($name, FlgScriptRunningInstance $currentInstance, array $references)
+    {
+        $uniqueReference = $this->getSha1FromReferences($name, $references);
+
+        $scriptWatcher = new FlgWatchScript();
+        $scriptWatcher->setReferenceId($uniqueReference);
+        $scriptWatcher->setFlgScriptRunningInstance($currentInstance);
+
+        $this->getEntityManager()->persist($scriptWatcher);
+        $this->getEntityManager()->flush($scriptWatcher);
+    }
+
+    protected function getSha1FromReferences($name, array $references)
+    {
+        $concatRef = $name;
+        foreach ($references as $key => $ref) {
+            if (!is_array($ref) && !(is_object($ref))) {
+                $concatRef .= $key . $ref;
+            }
+        }
+
+        $uniqueReference = sha1($concatRef);
+
+        return $uniqueReference;
+    }
+
+    protected function getScript($name)
     {
         $flgScript = $this->getEntityManager()->getRepository('Earls\FlamingoCommandQueueBundle\Entity\FlgScript')->findOneBy(array('name' => $name));
 
@@ -57,15 +97,14 @@ class ExecutionControl implements ExecutionControlInterface
             $flgScript = new FlgScript();
             $flgScript->setName($name);
             $this->getEntityManager()->persist($flgScript);
+            $this->getEntityManager()->flush($flgScript);
         }
 
         return $flgScript;
     }
 
-    public function createScriptRunningInstance($name, $group = null, $uniqueId = null)
+    public function createScriptRunningInstance($name, $group = null, $uniqueId = null, $flgScript)
     {
-        $flgScript = $this->openScript($name);
-
         $flgScriptRunningInstance = new FlgScriptRunningInstance();
         $flgScriptRunningInstance->setCreatedAt();
         $flgScriptRunningInstance->setFlgScript($flgScript);
@@ -77,7 +116,7 @@ class ExecutionControl implements ExecutionControlInterface
         $flgScriptRunningInstance->setStatus(FlgScriptStatus::STATE_PENDING);
 
         $this->getEntityManager()->persist($flgScriptRunningInstance);
-        $this->getEntityManager()->flush();
+        $this->getEntityManager()->flush($flgScriptRunningInstance);
 
         return $flgScriptRunningInstance;
     }
@@ -101,9 +140,9 @@ class ExecutionControl implements ExecutionControlInterface
         }
     }
 
-    public function closeInstance(FlgScriptRunningInstance $flgScriptRunningInstance, array $logs, $scriptTime, $pendingTime, $status = FlgScriptStatus::STATE_FINISHED)
+    public function closeInstance(FlgScriptRunningInstance $flgScriptRunningInstance, array $logs, $scriptTime, $pendingTime, $status = FlgScriptStatus::STATE_FINISHED, $archiveEnable = true)
     {
-        $this->archiveFinishedRunningInstance($flgScriptRunningInstance, $logs, $scriptTime, $pendingTime, $status);
+        $this->archiveFinishedRunningInstance($flgScriptRunningInstance, $logs, $scriptTime, $pendingTime, $status, $archiveEnable);
     }
 
     protected function canRun(FlgScriptRunningInstance $flgScriptRunningInstance)
@@ -216,7 +255,7 @@ class ExecutionControl implements ExecutionControlInterface
     public function run(FlgScriptRunningInstance $flgScriptRunningInstance)
     {
         $flgScriptRunningInstance->setStatus(FlgScriptStatus::STATE_RUNNING);
-        $this->getEntityManager()->flush();
+        $this->getEntityManager()->flush($flgScriptRunningInstance);
     }
 
     public function fail(FlgScriptInstanceLog $flgScriptInstanceLog, $reason = null, $status = FlgScriptStatus::STATE_FAILED)
@@ -225,15 +264,15 @@ class ExecutionControl implements ExecutionControlInterface
 
         //copy from Symfony\Bridge\Monolog\Handler\DebugHandler::getLogs()
         $records[] = array(
-                'timestamp'    => time(),
-                'message'      => $message,
-                'priority'     => 250,
-                'priorityName' => "NOTICE",
-                'context'      => null,
-            );
-        
+            'timestamp' => time(),
+            'message' => $message,
+            'priority' => 250,
+            'priorityName' => "NOTICE",
+            'context' => null,
+        );
+
         //keep previous logs
-        if($flgScriptInstanceLog->getLog()){
+        if ($flgScriptInstanceLog->getLog()) {
             $records = array_merge($flgScriptInstanceLog->getLog(), $records);
         }
         $flgScriptInstanceLog->setLog($records);
@@ -284,18 +323,21 @@ class ExecutionControl implements ExecutionControlInterface
         return $isStillAlive;
     }
 
-    protected function archiveFinishedRunningInstance(FlgScriptRunningInstance $flgScriptRunningInstance, array $logs, $scriptTime, $pendingTime, $status = FlgScriptStatus::STATE_FINISHED)
+    protected function archiveFinishedRunningInstance(FlgScriptRunningInstance $flgScriptRunningInstance, array $logs, $scriptTime, $pendingTime, $status = FlgScriptStatus::STATE_FINISHED, $archiveEnable = true)
     {
-        $instanceLog = $this->createArchiveInstance($flgScriptRunningInstance);
-        $filtereLogs = $this->filterLogs($logs);
-        $instanceLog->setLog($filtereLogs);
-        $instanceLog->setDuration($scriptTime);
-        $instanceLog->setPendingDuration($pendingTime);
-        $instanceLog->setStatus($status);
+        //doesn't create archive if disable
+        if ($archiveEnable) {
+            $instanceLog = $this->createArchiveInstance($flgScriptRunningInstance);
+            $filtereLogs = $this->filterLogs($logs);
+            $instanceLog->setLog($filtereLogs);
+            $instanceLog->setDuration($scriptTime);
+            $instanceLog->setPendingDuration($pendingTime);
+            $instanceLog->setStatus($status);
+            $this->getEntityManager()->persist($instanceLog);
+        }
 
         $this->getEntityManager()->remove($flgScriptRunningInstance);
-        $this->getEntityManager()->persist($instanceLog);
-        $this->getEntityManager()->flush();
+        $this->getEntityManager()->flush($flgScriptRunningInstance);
     }
 
     protected function archiveBrokenInstance(FlgScriptRunningInstance $flgScriptRunningInstance)
@@ -305,7 +347,7 @@ class ExecutionControl implements ExecutionControlInterface
         $this->fail($instanceLog, "The script has stopped after an Fatal Error happening during the process", FlgScriptStatus::STATE_FAILED);
 
         $this->getEntityManager()->persist($instanceLog);
-        $this->getEntityManager()->flush();
+        $this->getEntityManager()->flush($instanceLog);
     }
 
     protected function archiveFailedInstance(FlgScriptRunningInstance $flgScriptRunningInstance, $message, $status = FlgScriptStatus::STATE_FAILED)
@@ -315,7 +357,7 @@ class ExecutionControl implements ExecutionControlInterface
         $this->fail($instanceLog, $message, $status);
 
         $this->getEntityManager()->persist($instanceLog);
-        $this->getEntityManager()->flush();
+        $this->getEntityManager()->flush($instanceLog);
     }
 
     public function saveProgress(FlgScriptRunningInstance $flgScriptRunningInstance, array $logs)
@@ -387,9 +429,9 @@ class ExecutionControl implements ExecutionControlInterface
     {
         $logManager = $this->getLogManager();
         $filteredStatusLogs = $logManager->getSpecificLogs($logs, $this->logLimitStatus);
-        
+
         if ($this->logLimitLine !== 0) {
-            $filteredLineLogs = array_slice($filteredStatusLogs, ($this->logLimitLine+1) * -1);
+            $filteredLineLogs = array_slice($filteredStatusLogs, ($this->logLimitLine + 1) * -1);
             $filteredLogs = $filteredLineLogs;
         } else {
             $filteredLogs = $filteredStatusLogs;

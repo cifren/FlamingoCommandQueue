@@ -55,7 +55,7 @@ Here the command manager will run and save all data in the Table. The logs will 
 into an array in the entity `FlgScriptInstanceLog`.
 
 Why an array ? Because like this, you can retrieve all level of notification from 
-symfony2, you could use into your command from 
+Symfony2/Monolog, you could use into your command from 
 [logger](http://symfony.com/fr/doc/current/cookbook/logging/monolog.html).
 
 ###TIPS
@@ -73,9 +73,10 @@ In your monolog config (config_prod.yml) you can add
 
 Queue
 =====
+You can line up commands in a table, everytime a command's instance is created, the system will line 
+up the commands instance and execute them one by one.
 
-You can line up a command in the entity/table `FlgScriptRunningInstance`, the thing 
-you have to do is to declare a group's name.
+The commands will be stored into the entity/table `FlgScriptRunningInstance`, the thing you have to do is to declare a group's name.
 
 ```php 
 <?php
@@ -88,6 +89,8 @@ class RunCommand extends ContainerAwareCommand
         
         $scriptName = 'myOxpeckerRunCommand';
         $groupName = 'ninja';
+            
+        $this->getFlgCommand($groupName);
         $cmdManager->start($scriptName, $groupName);
 
         //******
@@ -95,6 +98,12 @@ class RunCommand extends ContainerAwareCommand
         //******
 
         $cmdManager->stop($this->getLogs());
+    }
+
+    protected function getFlgCommand($groupName)
+    {
+        $flgCommand = new FlgCommand();
+        $flgCommand->setGroupName($groupName);
     }
 
 }
@@ -121,6 +130,7 @@ class RunCommand extends ContainerAwareCommand
         $scriptName = 'myOxpeckerRunCommand';
         $groupName = 'ninja';
         $uniqueId = 'storeId=15';
+        $this->getFlgCommand($groupName, $uniqueId);
         $cmdManager->start($scriptName, $groupName, $uniqueId);
 
         //******
@@ -128,6 +138,13 @@ class RunCommand extends ContainerAwareCommand
         //******
 
         $cmdManager->stop($this->getLogs());
+    }
+
+    protected function getFlgCommand($groupName, $uniqueId)
+    {
+        $flgCommand = new FlgCommand();
+        $flgCommand->setGroupName($groupName);
+        $flgCommand->setGroupName($uniqueId);
     }
 
 }
@@ -148,6 +165,8 @@ The command will queue only one command with this Id, avoid repetition,
 if you add the command on web page and the command is ran several times per minutes
 or if the command is lasting slower than the time between 2 crons, your call, 
 or if you need a permanent execution etc...
+        
+See [Command Options](commandOptions.md) for more options
 
 Entities
 ========
