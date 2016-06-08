@@ -5,16 +5,15 @@ namespace Earls\FlamingoCommandQueueBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Earls\FlamingoCommandQueueBundle\Entity\FlgScriptInstanceLog
+ * Earls\FlamingoCommandQueueBundle\Entity\FlgScriptInstanceLog.
  *
  * @ORM\Table(name="flg_script_instance_log")
  * @ORM\Entity
  */
 class FlgScriptInstanceLog
 {
-
     /**
-     * @var int $id
+     * @var int
      *
      * @ORM\Column(name="id", type="bigint", options={"unsigned"=true})
      * @ORM\Id
@@ -23,36 +22,36 @@ class FlgScriptInstanceLog
     protected $id;
 
     /**
-     * @var string $log
+     * @var string
      *
      * @ORM\Column(name="log", type="array")
      */
     protected $log;
 
     /**
-     * @var int $duration       The time (in milliseconds), time of the script lasted
+     * @var int The time (in milliseconds), time of the script lasted
      *
      * @ORM\Column(name="duration", type="bigint", options={"unsigned"=true}, nullable=true)
      */
     protected $duration;
 
     /**
-     * @var int $pendingDuration    The time (in milliseconds), time of the script waited in the queue
+     * @var int The time (in milliseconds), time of the script waited in the queue
      *
      * @ORM\Column(name="pending_duration", type="bigint", options={"unsigned"=true}, nullable=true)
      */
     protected $pendingDuration;
 
     /**
-     * @var \DateTime $createdAt
+     * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="datetime")
      */
     protected $createdAt;
 
     /**
-     * @var integer flgStatus
-     * 
+     * @var int flgStatus
+     *
      * Should use only :
      *  - STATE_CANCELED
      *  - STATE_FINISHED
@@ -147,5 +146,4 @@ class FlgScriptInstanceLog
 
         return $this;
     }
-
 }

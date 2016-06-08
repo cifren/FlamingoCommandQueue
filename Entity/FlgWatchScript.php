@@ -5,7 +5,7 @@ namespace Earls\FlamingoCommandQueueBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Earls\FlamingoCommandQueueBundle\Entity\FlgWatchScript
+ * Earls\FlamingoCommandQueueBundle\Entity\FlgWatchScript.
  *
  * @ORM\Table(name="flg_watch_script", indexes={
  *      @ORM\Index(name="name_idx", columns={"referenceId"})
@@ -14,9 +14,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class FlgWatchScript
 {
-
     /**
-     * @var int $id
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -25,7 +24,7 @@ class FlgWatchScript
     protected $id;
 
     /**
-     * @var int $referenceId
+     * @var int
      *
      * @ORM\Column(name="reference_id", type="interger")
      */
@@ -33,7 +32,7 @@ class FlgWatchScript
 
     /**
      * @var FlgScriptRunningInstance
-     * 
+     *
      * @ORM\ManyToOne(targetEntity="FlgScriptRunningInstance")
      * @ORM\JoinColumn(name="flg_script_running_instance_id", referencedColumnName="id")
      */
@@ -62,19 +61,21 @@ class FlgWatchScript
     public function setReferenceName($referenceName)
     {
         $this->referenceName = $referenceName;
+
         return $this;
     }
 
     public function setReferenceId($referenceId)
     {
         $this->referenceId = $referenceId;
+
         return $this;
     }
 
     public function setFlgScriptRunningInstance(FlgScriptRunningInstance $flgScriptRunningInstance)
     {
         $this->flgScriptRunningInstance = $flgScriptRunningInstance;
+
         return $this;
     }
-
 }

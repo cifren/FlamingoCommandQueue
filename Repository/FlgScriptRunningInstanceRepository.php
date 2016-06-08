@@ -7,11 +7,10 @@ use Earls\FlamingoCommandQueueBundle\Entity\FlgScriptRunningInstance;
 use Earls\FlamingoCommandQueueBundle\Model\FlgScriptStatus;
 
 /**
- * Earls\FlamingoCommandQueueBundle\Repository\FlgScriptRunningInstanceRepository
+ * Earls\FlamingoCommandQueueBundle\Repository\FlgScriptRunningInstanceRepository.
  */
 class FlgScriptRunningInstanceRepository extends EntityRepository
 {
-
     public function getFirstInQueue($groupSha)
     {
         $qb = $this->createQueryBuilder('i')
@@ -19,7 +18,7 @@ class FlgScriptRunningInstanceRepository extends EntityRepository
                 ->andWhere('i.groupSha = :sha')
                 ->setParameters(array(
                     'sha' => $groupSha,
-                    'status' => FlgScriptStatus::STATE_RUNNING
+                    'status' => FlgScriptStatus::STATE_RUNNING,
                 ))
                 ->setMaxResults(1);
         $result = $qb->getQuery()->getOneOrNullResult();
@@ -48,7 +47,7 @@ class FlgScriptRunningInstanceRepository extends EntityRepository
     public function getQbRunningInstance()
     {
         $qb = $this->createQueryBuilder('i')
-                ->where("i.status = :status")
+                ->where('i.status = :status')
                 ->setParameter('status', FlgScriptStatus::STATE_RUNNING);
 
         return $qb;
@@ -58,7 +57,7 @@ class FlgScriptRunningInstanceRepository extends EntityRepository
     {
         $qb = $this->createQueryBuilder('i')
                 ->where('i.groupSha = :sha')
-                ->andWhere("i.status = :status")
+                ->andWhere('i.status = :status')
                 ->setParameters(
                 array(
                     'sha' => $groupSha,
@@ -75,7 +74,7 @@ class FlgScriptRunningInstanceRepository extends EntityRepository
                 ->where('i.id < :id')
                 ->setParameters(
                 array(
-                    'id' => $flgScriptRunningInstance->getId()
+                    'id' => $flgScriptRunningInstance->getId(),
                 )
         );
 
@@ -85,8 +84,8 @@ class FlgScriptRunningInstanceRepository extends EntityRepository
     public function getPendingInstanceWithSameUniqueId($groupSha, $uniqueSha)
     {
         $qb = $this->createQueryBuilder('i')
-                ->where("i.status = :status")
-                ->andWhere("i.uniqueSha = :uniqueSha")
+                ->where('i.status = :status')
+                ->andWhere('i.uniqueSha = :uniqueSha')
                 ->setMaxResults(1)
                 ->setParameters(
                 array(
@@ -103,5 +102,4 @@ class FlgScriptRunningInstanceRepository extends EntityRepository
 
         return $qb->getQuery()->getOneOrNullResult();
     }
-
 }

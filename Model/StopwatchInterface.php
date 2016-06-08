@@ -3,13 +3,11 @@
 namespace Earls\FlamingoCommandQueueBundle\Model;
 
 /**
- * Earls\FlamingoCommandQueueBundle\Model\StopwatchInterface
+ * Earls\FlamingoCommandQueueBundle\Model\StopwatchInterface.
  */
 interface StopwatchInterface
 {
-
     /**
-     *
      * @param string $name
      *
      * @return \DateInterval

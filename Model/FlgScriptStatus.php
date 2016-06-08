@@ -4,7 +4,6 @@ namespace Earls\FlamingoCommandQueueBundle\Model;
 
 class FlgScriptStatus
 {
-
     /**
      * State if job is inserted, and might be started.
      *
@@ -43,5 +42,4 @@ class FlgScriptStatus
             self::STATE_TERMINATED => 'terminated',
         );
     }
-
 }

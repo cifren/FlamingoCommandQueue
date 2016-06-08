@@ -6,38 +6,32 @@ use Doctrine\ORM\EntityManager;
 use Earls\FlamingoCommandQueueBundle\Entity\FlgScript;
 use Earls\FlamingoCommandQueueBundle\Entity\FlgScriptInstanceLog;
 use Earls\FlamingoCommandQueueBundle\Entity\FlgScriptRunningInstance;
-use Earls\FlamingoCommandQueueBundle\Model\FlgScriptStatus;
 use Earls\FlamingoCommandQueueBundle\Manager\LogManager;
 use Earls\FlamingoCommandQueueBundle\Entity\FlgWatchScript;
 
 /**
- * Earls\FlamingoCommandQueueBundle\Model\ExecutionControl
+ * Earls\FlamingoCommandQueueBundle\Model\ExecutionControl.
  *
  * it is the control tower of the script instance
  */
 class ExecutionControl implements ExecutionControlInterface
 {
-
     /**
-     *
      * @var EntityManager
      */
     protected $entityManager;
 
     /**
-     *
-     * @var string 
+     * @var string
      */
     protected $logLimitStatus;
 
     /**
-     *
-     * @var int 
+     * @var int
      */
     protected $logLimitLine;
 
     /**
-     *
      * @var LogManager
      */
     protected $logManager;
@@ -80,7 +74,7 @@ class ExecutionControl implements ExecutionControlInterface
         $concatRef = $name;
         foreach ($references as $key => $ref) {
             if (!is_array($ref) && !(is_object($ref))) {
-                $concatRef .= $key . $ref;
+                $concatRef .= $key.$ref;
             }
         }
 
@@ -103,7 +97,7 @@ class ExecutionControl implements ExecutionControlInterface
         return $flgScript;
     }
 
-    public function createScriptRunningInstance($name, $group = null, $uniqueId = null, $flgScript)
+    public function createScriptRunningInstance($name, $group, $uniqueId, $flgScript)
     {
         $flgScriptRunningInstance = new FlgScriptRunningInstance();
         $flgScriptRunningInstance->setCreatedAt();
@@ -154,7 +148,8 @@ class ExecutionControl implements ExecutionControlInterface
             $canRun = $this->canRunWithinGroup($flgScriptRunningInstance);
         } elseif ($flgScriptRunningInstance->getUniqueId()) { //if no group, no queue but still control uniqueId
             $canRun = $this->canRunWithinUniqueId($flgScriptRunningInstance);
-        } else {//just log scripts
+        } else {
+            //just log scripts
             $this->run($flgScriptRunningInstance);
             $canRun = true;
         }
@@ -209,6 +204,7 @@ class ExecutionControl implements ExecutionControlInterface
     {
         $runningInstances = $this->getEntityManager()->getRepository('Earls\FlamingoCommandQueueBundle\Entity\FlgScriptRunningInstance')
                 ->getRunningInstanceWithinGroup($flgScriptRunningInstance->getGroupSha());
+
         return $this->hasRunningInstance($flgScriptRunningInstance, $runningInstances);
     }
 
@@ -230,7 +226,7 @@ class ExecutionControl implements ExecutionControlInterface
             //if one loop is true, all true (should not happen more than once, unless there is bug)
             if ($hasRunningInstance) {
                 $mainHasRunningInstance = true;
-                $countRunningInstance++;
+                ++$countRunningInstance;
             }
         }
         if ($countRunningInstance > 1) {
@@ -260,14 +256,14 @@ class ExecutionControl implements ExecutionControlInterface
 
     public function fail(FlgScriptInstanceLog $flgScriptInstanceLog, $reason = null, $status = FlgScriptStatus::STATE_FAILED)
     {
-        $message = "This script has stopped with the following output : " . ((!$reason) ? "No output given... not helpful !" : $reason);
+        $message = 'This script has stopped with the following output : '.((!$reason) ? 'No output given... not helpful !' : $reason);
 
         //copy from Symfony\Bridge\Monolog\Handler\DebugHandler::getLogs()
         $records[] = array(
             'timestamp' => time(),
             'message' => $message,
             'priority' => 250,
-            'priorityName' => "NOTICE",
+            'priorityName' => 'NOTICE',
             'context' => null,
         );
 
@@ -344,7 +340,7 @@ class ExecutionControl implements ExecutionControlInterface
     {
         $instanceLog = $this->createArchiveInstance($flgScriptRunningInstance);
         $this->getEntityManager()->remove($flgScriptRunningInstance);
-        $this->fail($instanceLog, "The script has stopped after an Fatal Error happening during the process", FlgScriptStatus::STATE_FAILED);
+        $this->fail($instanceLog, 'The script has stopped after an Fatal Error happening during the process', FlgScriptStatus::STATE_FAILED);
 
         $this->getEntityManager()->persist($instanceLog);
         $this->getEntityManager()->flush($instanceLog);
@@ -389,7 +385,6 @@ class ExecutionControl implements ExecutionControlInterface
     }
 
     /**
-     *
      * @return EntityManager
      */
     public function getEntityManager()
@@ -398,8 +393,8 @@ class ExecutionControl implements ExecutionControlInterface
     }
 
     /**
+     * @param \Doctrine\ORM\EntityManager $entityManager
      *
-     * @param  \Doctrine\ORM\EntityManager                    $entityManager
      * @return \Earls\FlamingoCommandQueueBundle\Manager\Pool
      */
     public function setEntityManager(EntityManager $entityManager)
@@ -444,5 +439,4 @@ class ExecutionControl implements ExecutionControlInterface
     {
         return $this->logManager;
     }
-
 }

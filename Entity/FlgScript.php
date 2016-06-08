@@ -5,7 +5,7 @@ namespace Earls\FlamingoCommandQueueBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Earls\FlamingoCommandQueueBundle\Entity\FlgScript
+ * Earls\FlamingoCommandQueueBundle\Entity\FlgScript.
  *
  * @ORM\Table(name="flg_script", indexes={
  *      @ORM\Index(name="name_idx", columns={"name"})
@@ -14,9 +14,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class FlgScript
 {
-
     /**
-     * @var int $id
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -25,15 +24,14 @@ class FlgScript
     protected $id;
 
     /**
-     * @var string $name
+     * @var string
      *
      * @ORM\Column(name="name", type="string", length=50)
      */
     protected $name;
 
     /**
-     *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -41,7 +39,6 @@ class FlgScript
     }
 
     /**
-     *
      * @return string
      */
     public function getName()
@@ -50,8 +47,8 @@ class FlgScript
     }
 
     /**
+     * @param string $name
      *
-     * @param  string                                             $name
      * @return \Earls\FlamingoCommandQueueBundle\Entity\FlgScript
      */
     public function setName($name)
@@ -60,5 +57,4 @@ class FlgScript
 
         return $this;
     }
-
 }

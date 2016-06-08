@@ -3,62 +3,51 @@
 namespace Earls\FlamingoCommandQueueBundle\Model;
 
 use Doctrine\ORM\EntityManager;
-use Earls\FlamingoCommandQueueBundle\Model\Stopwatch;
-use Earls\FlamingoCommandQueueBundle\Model\FlgCommand;
 
 /**
- * Earls\FlamingoCommandQueueBundle\Model\CommandManagerInstance
+ * Earls\FlamingoCommandQueueBundle\Model\CommandManagerInstance.
  *
  * Manage only one instance of command, create a new object in order to manage more than one
  */
 class CommandManagerInstance
 {
-
     /**
-     *
      * @var \Earls\FlamingoCommandQueueBundle\Entity\FlgScriptInstance
      */
     protected $currentInstance;
 
     /**
-     *
-     * @var boolean
+     * @var bool
      */
     protected $started = false;
 
     /**
-     *
-     * @var boolean
+     * @var bool
      */
     protected $stopped = false;
 
     /**
-     *
      * @var Stopwatch
      */
     protected $stopWatch;
 
     /**
-     *
      * @var ExecutionControl
      */
     protected $executionControl;
 
     /**
-     *
      * @var \Doctrine\ORM\EntityManager
      */
     protected $entityManager;
 
     /**
-     *
-     * @var array 
+     * @var array
      */
     protected $options = array();
 
     /**
-     *
-     * @var FlgCommand 
+     * @var FlgCommand
      */
     protected $flgCOmmand;
 
@@ -72,7 +61,7 @@ class CommandManagerInstance
     public function start($name, FlgCommand $flgCommand)
     {
         if ($this->started) {
-            throw new \Exception("The command has already been started");
+            throw new \Exception('The command has already been started');
         }
 
         $this->executionControl->setOptions($this->getOptions());
@@ -90,7 +79,7 @@ class CommandManagerInstance
     public function stop(array $logs = null, $status = FlgScriptStatus::STATE_FINISHED)
     {
         if ($this->stopped) {
-            throw new \Exception("The command has already been stopped");
+            throw new \Exception('The command has already been stopped');
         }
         $this->stopped = true;
 
@@ -104,7 +93,6 @@ class CommandManagerInstance
     }
 
     /**
-     *
      * @return Stopwatch
      */
     protected function getStopWatch()
@@ -113,7 +101,6 @@ class CommandManagerInstance
     }
 
     /**
-     *
      * @param string $id
      */
     protected function setStartTime($id = 'main')
@@ -122,7 +109,6 @@ class CommandManagerInstance
     }
 
     /**
-     *
      * @param string $id
      */
     protected function setEndTime($id = 'main')
@@ -131,9 +117,9 @@ class CommandManagerInstance
     }
 
     /**
+     * @param string $id
      *
-     * @param  string       $id
-     * @return interger     The time (in milliseconds)
+     * @return interger The time (in milliseconds)
      */
     protected function getFinishTime($id = 'main')
     {
@@ -141,7 +127,6 @@ class CommandManagerInstance
     }
 
     /**
-     *
      * @return EntityManager
      */
     public function getEntityManager()
@@ -150,8 +135,8 @@ class CommandManagerInstance
     }
 
     /**
+     * @param \Doctrine\ORM\EntityManager $entityManager
      *
-     * @param  \Doctrine\ORM\EntityManager                              $entityManager
      * @return \Earls\FlamingoCommandQueueBundle\Manager\CommandManager
      */
     public function setEntityManager(EntityManager $entityManager)
@@ -184,5 +169,4 @@ class CommandManagerInstance
 
         return $this;
     }
-
 }

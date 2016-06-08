@@ -12,7 +12,7 @@ use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\StreamOutput;
 
 /**
- * Earls\FlamingoCommandQueueBundle\Tests\FunctionalTests\Model\FixtureAwareTestCase
+ * Earls\FlamingoCommandQueueBundle\Tests\FunctionalTests\Model\FixtureAwareTestCase.
  **/
 abstract class FixtureAwareTestCase extends WebTestCase
 {
@@ -40,7 +40,7 @@ abstract class FixtureAwareTestCase extends WebTestCase
     {
         $this->getFixtureLoader()->addFixture($fixture);
     }
-    
+
     protected function initTestDatabase()
     {
         $this->runCommand('doctrine:database:drop --force');
@@ -104,10 +104,11 @@ abstract class FixtureAwareTestCase extends WebTestCase
 
         return $output;
     }
-    
+
     protected function getContainer()
     {
         self::bootKernel();
+
         return self::$kernel->getContainer();
     }
 }

@@ -2,15 +2,11 @@
 
 namespace Earls\FlamingoCommandQueueBundle\Model;
 
-use Earls\FlamingoCommandQueueBundle\Model\StopwatchInterface;
-
 class Stopwatch extends \Symfony\Component\Stopwatch\Stopwatch implements StopwatchInterface
 {
-
     /**
-     * 
      * @param string $name
-     * 
+     *
      * @return \DateInterval
      */
     public function getFinishTime($name)

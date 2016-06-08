@@ -5,7 +5,7 @@ namespace Earls\FlamingoCommandQueueBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Earls\FlamingoCommandQueueBundle\Entity\FlgScriptRunningInstance
+ * Earls\FlamingoCommandQueueBundle\Entity\FlgScriptRunningInstance.
  *
  * @ORM\Table(name="flg_script_running_instance", indexes={
  *      @ORM\Index(name="group_sha_idx", columns={"group_sha"}),
@@ -15,9 +15,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class FlgScriptRunningInstance
 {
-
     /**
-     * @var int $id
+     * @var int
      *
      * @ORM\Column(name="id", type="bigint", options={"unsigned"=true})
      * @ORM\Id
@@ -26,60 +25,60 @@ class FlgScriptRunningInstance
     protected $id;
 
     /**
-     * @var integer $pid
+     * @var int
      *
      * @ORM\Column(name="pid", type="integer")
      */
     protected $pid;
 
     /**
-     * @var integer flgStatus
+     * @var int flgStatus
      *
      * Should use only :
      *  - STATE_PENDING
      *  - STATE_RUNNING
-     * 
+     *
      * @ORM\Column(name="status", type="integer")
      */
     protected $status;
 
     /**
-     * @var string $log
+     * @var string
      *
      * @ORM\Column(name="log", type="array")
      */
     protected $log;
 
     /**
-     * @var string $groupSha
+     * @var string
      *
      * @ORM\Column(name="group_sha", type="string", length=40, nullable=true)
      */
     protected $groupSha;
 
     /**
-     * @var string $groupName
+     * @var string
      *
      * @ORM\Column(name="group_name", type="string", length=255, nullable=true)
      */
     protected $groupName;
 
     /**
-     * @var string $uniqueSha
+     * @var string
      *
      * @ORM\Column(name="unique_sha", type="string", length=40, nullable=true)
      */
     protected $uniqueSha;
 
     /**
-     * @var string $uniqueId
+     * @var string
      *
      * @ORM\Column(name="unique_id", type="string", length=255, nullable=true)
      */
     protected $uniqueId;
 
     /**
-     * @var \DateTime $createdAt
+     * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="datetime")
      */
@@ -196,6 +195,7 @@ class FlgScriptRunningInstance
     public function setUniqueId($uniqueId)
     {
         $this->uniqueId = $uniqueId;
+
         return $this;
     }
 
@@ -212,7 +212,7 @@ class FlgScriptRunningInstance
     public function setLog($log)
     {
         $this->log = $log;
+
         return $this;
     }
-
 }

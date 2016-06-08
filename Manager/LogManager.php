@@ -4,7 +4,6 @@ namespace Earls\FlamingoCommandQueueBundle\Manager;
 
 class LogManager
 {
-
     public function getShortLogs(array $logs, $startlength = 20, $endLength = 20)
     {
         $logs = $this->getNoticeLogs($logs);
@@ -30,7 +29,7 @@ class LogManager
 
     public function getSpecificLogs(array $logs, $type = 'NOTICE')
     {
-        $logs = array_filter($logs, function($var)use($type) {
+        $logs = array_filter($logs, function ($var) use ($type) {
             if (isset($var['priorityName'])) {
                 return $var['priorityName'] == $type;
             }
@@ -40,5 +39,4 @@ class LogManager
 
         return $logs;
     }
-
 }
