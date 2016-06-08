@@ -1,0 +1,16 @@
+sudo: false
+language:
+    - php
+php:
+    - "5.5"
+before_script:
+    - composer install
+env:
+    - ACTION="composer run lint"
+  
+script:
+    - $ACTION
+    
+notifications:
+  email:
+    -  cifren@msn.com
