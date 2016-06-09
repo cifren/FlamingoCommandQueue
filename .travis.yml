@@ -5,9 +5,10 @@ php:
     - "5.5"
 env:
     - ACTION="composer run lint"
-    - ACTION="composer run test;composer run coverall"
+    - ACTION="composer run test ; composer run coverall"
     
 before_script:
+    - phpenv config-rm xdebug.ini
     - composer install
   
 script:
