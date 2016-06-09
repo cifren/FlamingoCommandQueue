@@ -1,4 +1,4 @@
-Flamingo COmmand Queue
+Flamingo Command Queue
 ======================
 
 [![Coverage Status](https://coveralls.io/repos/github/cifren/FlamingoCommandQueue/badge.svg?branch=master)](https://coveralls.io/github/cifren/FlamingoCommandQueue?branch=master)
