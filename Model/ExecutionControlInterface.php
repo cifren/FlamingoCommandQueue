@@ -10,10 +10,10 @@ use Earls\FlamingoCommandQueueBundle\Entity\FlgScriptRunningInstance;
  */
 interface ExecutionControlInterface
 {
-    public function createScriptRunningInstance($name, $group = null);
+    public function createScriptRunningInstance($name, $group, $uniqueId, $flgScript);
 
     public function authorizeRunning(FlgScriptRunningInstance $flgScriptInstance);
-    public function closeInstance(FlgScriptRunningInstance $flgScriptRunningInstance, array $logs, $scriptTime, $pendingTime);
+    public function closeInstance(FlgScriptRunningInstance $flgScriptRunningInstance, array $logs, $scriptTime, $pendingTime, $status = FlgScriptStatus::STATE_FINISHED, $archiveEnable = true);
 
     /**
      * @return EntityManager

@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Earls\FlamingoCommandQueueBundle\Entity\FlgWatchScript.
  *
  * @ORM\Table(name="flg_watch_script", indexes={
- *      @ORM\Index(name="name_idx", columns={"referenceId"})
+ *      @ORM\Index(name="name_idx", columns={"reference_id"})
  * })
  * @ORM\Entity
  */

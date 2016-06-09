@@ -107,7 +107,7 @@ abstract class FixtureAwareTestCase extends WebTestCase
             $output = fread($fp, 4096);
         }
         fclose($fp);
-
+        
         return $output;
     }
 
