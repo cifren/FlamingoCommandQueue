@@ -4,6 +4,13 @@ language:
 php:
     - "5.5"
     
+services:
+  - mysql
+  
+cache:
+  directories:
+    - $HOME/.composer/cache
+    
 before_script:
     #coverage needs xdebug
     #- phpenv config-rm xdebug.ini
@@ -11,6 +18,7 @@ before_script:
   
 script:
     - composer run lint
+    #- composer run test_build
     - composer run test
     - composer run coverall
     
