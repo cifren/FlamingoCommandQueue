@@ -14,7 +14,7 @@ cache:
 before_script:
     #coverage needs xdebug
     #- phpenv config-rm xdebug.ini
-    - composer install
+    - composer update
   
 script:
     - composer run lint
