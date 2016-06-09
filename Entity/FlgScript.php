@@ -5,7 +5,7 @@ namespace Earls\FlamingoCommandQueueBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Earls\FlamingoCommandQueueBundle\Entity\FlgScript
+ * Earls\FlamingoCommandQueueBundle\Entity\FlgScript.
  *
  * @ORM\Table(name="flg_script", indexes={
  *      @ORM\Index(name="name_idx", columns={"name"})
