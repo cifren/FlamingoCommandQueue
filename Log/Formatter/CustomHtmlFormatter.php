@@ -32,7 +32,7 @@ class CustomHtmlFormatter extends HtmlFormatter
      *
      * @return string
      */
-    protected function addRow($th, $td = ' ')
+    protected function addRow($th, $td = ' ', $escapeTd = true)
     {
         $th = htmlspecialchars($th, ENT_NOQUOTES, 'UTF-8');
         $td = '<pre>'.htmlspecialchars($td, ENT_NOQUOTES, 'UTF-8').'</pre>';
