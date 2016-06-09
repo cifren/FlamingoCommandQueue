@@ -1,3 +1,10 @@
+Flamingo COmmand Queue
+======================
+
+[![Coverage Status](https://coveralls.io/repos/github/cifren/FlamingoCommandQueue/badge.svg?branch=master)](https://coveralls.io/github/cifren/FlamingoCommandQueue?branch=master)
+
+[![Build Status](https://travis-ci.org/cifren/FlamingoCommandQueue.svg?branch=master)](https://travis-ci.org/cifren/FlamingoCommandQueue)
+
 Overview
 ========
 
