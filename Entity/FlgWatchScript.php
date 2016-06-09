@@ -26,7 +26,7 @@ class FlgWatchScript
     /**
      * @var int
      *
-     * @ORM\Column(name="reference_id", type="interger")
+     * @ORM\Column(name="reference_id", type="integer")
      */
     protected $referenceId;
 
