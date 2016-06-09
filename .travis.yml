@@ -3,16 +3,19 @@ language:
     - php
 php:
     - "5.5"
-before_script:
-    - composer install
 env:
     - ACTION="composer run lint"
     - ACTION="composer run test"
-    - ACTION="composer run coverall"
+    
+before_script:
+    - composer install
   
 script:
     - $ACTION
     
+after_success:
+    - composer run coverall
+    
 notifications:
-  email:
-    -  cifren@msn.com
+    email:
+        -  cifren@msn.com
