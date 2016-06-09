@@ -7,6 +7,8 @@ before_script:
     - composer install
 env:
     - ACTION="composer run lint"
+    - ACTION="composer run test"
+    - ACTION="composer run coverall"
   
 script:
     - $ACTION
