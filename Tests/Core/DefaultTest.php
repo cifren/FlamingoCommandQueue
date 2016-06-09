@@ -17,23 +17,23 @@ class DefaultTest extends FixtureAwareTestCase
     }
 
     /** Used only to build kernel
-    * @group core
-    */
+     * @group core
+     */
     public function testBuild()
     {
         $doctrine = $this->getContainer()->get('doctrine');
         $entityManager = $doctrine->getManager();
-        
+
         $item = new FlgScript();
         $item->setName('test');
-        
+
         $entityManager->persist($item);
         $entityManager->flush();
-        
+
         $this->assertEquals('test', $item->getName());
-        
+
         $item = $entityManager->getRepository(FlgScript::class)->find(1);
-        
+
         $this->assertNotNull($item);
         $this->assertEquals('test', $item->getName());
     }
