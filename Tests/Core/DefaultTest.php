@@ -1,8 +1,6 @@
 <?php
 
-namespace Earls\FlamingoCommandQueueBundle\Tests\FunctionalTests\Tests\DefaultTest;
-
-use Earls\FlamingoCommandQueueBundle\Tests\Core\FixtureAwareTestCase;
+namespace Earls\FlamingoCommandQueueBundle\Tests\Core;
 
 /**
  * Default test.

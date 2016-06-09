@@ -12,7 +12,7 @@ use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\StreamOutput;
 
 /**
- * Earls\FlamingoCommandQueueBundle\Tests\FunctionalTests\Model\FixtureAwareTestCase.
+ * Earls\FlamingoCommandQueueBundle\Tests\Core\FixtureAwareTestCase.
  **/
 abstract class FixtureAwareTestCase extends WebTestCase
 {
