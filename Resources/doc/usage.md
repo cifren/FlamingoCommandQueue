@@ -90,7 +90,7 @@ class RunCommand extends ContainerAwareCommand
         $scriptName = 'myOxpeckerRunCommand';
         $groupName = 'ninja';
             
-        $this->getFlgCommand($groupName);
+        $this->getflgCommandOption($groupName);
         $cmdManager->start($scriptName, $groupName);
 
         //******
@@ -100,10 +100,10 @@ class RunCommand extends ContainerAwareCommand
         $cmdManager->stop($this->getLogs());
     }
 
-    protected function getFlgCommand($groupName)
+    protected function getflgCommandOption($groupName)
     {
-        $flgCommand = new FlgCommand();
-        $flgCommand->setGroupName($groupName);
+        $flgCommandOption = new flgCommandOption();
+        $flgCommandOption->setGroupName($groupName);
     }
 
 }
@@ -130,7 +130,7 @@ class RunCommand extends ContainerAwareCommand
         $scriptName = 'myOxpeckerRunCommand';
         $groupName = 'ninja';
         $uniqueId = 'storeId=15';
-        $this->getFlgCommand($groupName, $uniqueId);
+        $this->getflgCommandOption($groupName, $uniqueId);
         $cmdManager->start($scriptName, $groupName, $uniqueId);
 
         //******
@@ -140,11 +140,11 @@ class RunCommand extends ContainerAwareCommand
         $cmdManager->stop($this->getLogs());
     }
 
-    protected function getFlgCommand($groupName, $uniqueId)
+    protected function getflgCommandOption($groupName, $uniqueId)
     {
-        $flgCommand = new FlgCommand();
-        $flgCommand->setGroupName($groupName);
-        $flgCommand->setGroupName($uniqueId);
+        $flgCommandOption = new flgCommandOption();
+        $flgCommandOption->setGroupName($groupName);
+        $flgCommandOption->setGroupName($uniqueId);
     }
 
 }

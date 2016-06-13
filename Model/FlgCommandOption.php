@@ -2,7 +2,10 @@
 
 namespace Earls\FlamingoCommandQueueBundle\Model;
 
-class FlgCommand
+/**
+ * Earls\FlamingoCommandQueueBundle\Model\FlgCommandOption
+ */ 
+class FlgCommandOption
 {
     /**
      * You can line up commands in a table, everytime a command's instance
@@ -10,7 +13,7 @@ class FlgCommand
      *
      * @var string
      */
-    protected $groupName = null;
+    protected $groupName = 'default';
 
     /**
      * Command waiting for their execution(pending) will be unique, all newly created commands with the same

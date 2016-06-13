@@ -11,5 +11,6 @@ class FlgScriptTest extends \PHPUnit_Framework_TestCase
         $entity = new FlgScript();
         $entity->setName('lol');
         $this->assertEquals('lol', $entity->getName());
+        $this->assertNull($entity->getId());
     }
 }

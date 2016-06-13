@@ -5,7 +5,7 @@ namespace Earls\FlamingoCommandQueueBundle\Model;
 use Doctrine\ORM\EntityManager;
 
 /**
- * Earls\FlamingoCommandQueueBundle\Model\CommandManagerInstance.
+ * Earls\FlamingoCommandQueueBundle\Model\CommandManagerInstance
  *
  * Manage only one instance of command, create a new object in order to manage more than one
  */
@@ -47,9 +47,9 @@ class CommandManagerInstance
     protected $options = array();
 
     /**
-     * @var FlgCommand
+     * @var FlgCommandOption
      */
-    protected $flgCOmmand;
+    protected $flgCommandOption;
 
     public function __construct(Stopwatch $stopWatch, ExecutionControl $executionControl, EntityManager $em)
     {
@@ -58,17 +58,18 @@ class CommandManagerInstance
         $this->entityManager = $em;
     }
 
-    public function start($name, FlgCommand $flgCommand)
+    public function start($name, FlgCommandOption $flgCommandOption = null)
     {
         if ($this->started) {
             throw new \Exception('The command has already been started');
         }
+        $this->setFlgCommandOption($flgCommandOption);
 
         $this->executionControl->setOptions($this->getOptions());
         $this->started = true;
         $this->setStartTime();
 
-        $this->currentInstance = $this->currentInstance->openInstance($name, $flgCommand);
+        $this->currentInstance = $this->executionControl->openInstance($name, $this->getFlgCommandOption());
 
         //authorization to run
         $this->setStartTime('pending');
@@ -84,7 +85,7 @@ class CommandManagerInstance
         $this->stopped = true;
 
         $this->setEndTime();
-        $this->executionControl->closeInstance($this->currentInstance, $logs, $this->getFinishTime(), $this->getFinishTime('pending'), $status, $this->flgCOmmand->getArchiveEnable());
+        $this->executionControl->closeInstance($this->currentInstance, $logs, $this->getFinishTime(), $this->getFinishTime('pending'), $status, $this->getFlgCommandOption()->getArchiveEnable());
     }
 
     public function saveProgress(array $logs)
@@ -149,8 +150,8 @@ class CommandManagerInstance
     public function getDefaultOptions()
     {
         return array(
-            'maxPendingInstance' => $this->flgCOmmand->getMaxPendingInstance(),
-            'pendingLapsTime' => $this->flgCOmmand->getPendingLapsTime(),
+            'maxPendingInstance' => $this->getFlgCommandOption()->getMaxPendingInstance(),
+            'pendingLapsTime' => $this->getFlgCommandOption()->getPendingLapsTime(),
         );
     }
 
@@ -168,5 +169,22 @@ class CommandManagerInstance
         $this->options = array_merge($this->getDefaultOptions(), $options);
 
         return $this;
+    }
+    
+    protected function getFlgCommandOption()
+    {
+        return $this->flgCommandOption?$this->flgCommandOption:$this->getDefaultFlgCommandOption();
+    }
+    
+    protected function setFlgCommandOption(FlgCommandOption $flgCommandOption = null)
+    {
+        $this->flgCommandOption = $flgCommandOption;
+        
+        return $this;
+    }
+    
+    protected function getDefaultFlgCommandOption()
+    {
+        return new FlgCommandOption();
     }
 }

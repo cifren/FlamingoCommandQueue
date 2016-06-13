@@ -10,7 +10,7 @@ use Earls\FlamingoCommandQueueBundle\Manager\LogManager;
 use Earls\FlamingoCommandQueueBundle\Entity\FlgWatchScript;
 
 /**
- * Earls\FlamingoCommandQueueBundle\Model\ExecutionControl.
+ * Earls\FlamingoCommandQueueBundle\Model\ExecutionControl
  *
  * it is the control tower of the script instance
  */
@@ -44,15 +44,15 @@ class ExecutionControl implements ExecutionControlInterface
         $this->logManager = $logManager;
     }
 
-    public function openInstance($name, FlgCommand $flgCommand)
+    public function openInstance($name, FlgCommandOption $flgCommandOption)
     {
         $flgScript = $this->getScript($name);
 
         //create new instance
-        $currentInstance = $this->createScriptRunningInstance($name, $flgCommand->getGroupName(), $flgCommand->getUniqueId(), $flgScript);
+        $currentInstance = $this->createScriptRunningInstance($name, $flgCommandOption->getGroupName(), $flgCommandOption->getUniqueId(), $flgScript);
 
         //create a scriptWatcher if references exist
-        $this->createScriptWatcher($name, $currentInstance, $flgCommand->getWatchScriptReferences());
+        $this->createScriptWatcher($name, $currentInstance, $flgCommandOption->getWatchScriptReferences());
 
         return $currentInstance;
     }

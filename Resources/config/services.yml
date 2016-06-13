@@ -19,7 +19,7 @@ services:
     flamingo.execution.control:
         class:  %flamingo.execution.control.class%
         arguments:
-            - "@doctrine.orm.entity_manager"   
+            - "@doctrine.orm.entity_manager"
             - "%flamingo.log.save.limit%"
             - "%flamingo.log.save.status%"
             - "@flamingo.manager.log"

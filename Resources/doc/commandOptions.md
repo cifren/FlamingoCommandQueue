@@ -1,4 +1,4 @@
-You can define several options on the object FlgCommand on the creation of the command's instance
+You can define several options on the object flgCommandOption on the creation of the command's instance
 
 We will review all those options here.
 
@@ -10,8 +10,8 @@ It defines how many command's instance are authorized to be waiting in the line 
 **Default:** 30 command's instances
 
 ```php
-    $flgCommand = new FlgCommand();
-    $flgCommand->setMaxPendingInstance(60);
+    $flgCommandOption = new flgCommandOption();
+    $flgCommandOption->setMaxPendingInstance(60);
 ```
 
 
@@ -24,8 +24,8 @@ and run or wait again.
 **Default:** 60seconds
 
 ```php
-    $flgCommand = new FlgCommand();
-    $flgCommand->setPendingLapsTime(60);
+    $flgCommandOption = new flgCommandOption();
+    $flgCommandOption->setPendingLapsTime(60);
 ```
 
 Archvive Enable
@@ -36,6 +36,6 @@ Archive or delete the command logs, entity FlgScriptInstanceLog
 **Default:** true
 
 ```php
-    $flgCommand = new FlgCommand();
-    $flgCommand->setArchiveEnable(false);
+    $flgCommandOption = new flgCommandOption();
+    $flgCommandOption->setArchiveEnable(false);
 ```

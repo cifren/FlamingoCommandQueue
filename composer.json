@@ -41,6 +41,7 @@
     "scripts": {
         "php_fixer": "vendor/friendsofphp/php-cs-fixer/php-cs-fixer fix --config-file .php_cs",
         "lint": "vendor/friendsofphp/php-cs-fixer/php-cs-fixer fix --config-file .php_cs --dry-run --diff",
+        "test_nologging": "vendor/phpunit/phpunit/phpunit -c nologging_phpunit.xml.dist --exclude-group core ",
         "test": "vendor/phpunit/phpunit/phpunit --exclude-group core",
         "test_build": "vendor/phpunit/phpunit/phpunit --group core",
         "coverall": "vendor/bin/coveralls -v"
