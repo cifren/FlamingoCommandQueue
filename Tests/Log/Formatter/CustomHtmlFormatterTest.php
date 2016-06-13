@@ -9,7 +9,7 @@ class CustomHtmlFormatterTest extends \PHPUnit_Framework_TestCase
     public function testCreate()
     {
         $item = new CustomHtmlFormatter();
-        
+
         $record = array(
             'priorityName' => 'prnz',
             'priority' => 100,
