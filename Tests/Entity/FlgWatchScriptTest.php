@@ -11,11 +11,11 @@ class FlgWatchScriptTest extends \PHPUnit_Framework_TestCase
     {
         $entity = new FlgWatchScript();
         $flgScriptRunningInstance = new FlgScriptRunningInstance();
-        
+
         $entity->setReferenceName('name');
         $entity->setReferenceId('id');
         $entity->setFlgScriptRunningInstance($flgScriptRunningInstance);
-        
+
         $this->assertNull($entity->getId());
         $this->assertEquals('name', $entity->getReferenceName());
         $this->assertEquals('id', $entity->getReferenceId());

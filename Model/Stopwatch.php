@@ -3,8 +3,8 @@
 namespace Earls\FlamingoCommandQueueBundle\Model;
 
 /**
- * Earls\FlamingoCommandQueueBundle\Model\Stopwatch
- */ 
+ * Earls\FlamingoCommandQueueBundle\Model\Stopwatch.
+ */
 class Stopwatch extends \Symfony\Component\Stopwatch\Stopwatch implements StopwatchInterface
 {
     /**

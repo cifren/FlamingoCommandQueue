@@ -3,8 +3,8 @@
 namespace Earls\FlamingoCommandQueueBundle\Manager;
 
 /**
- * Earls\FlamingoCommandQueueBundle\Manager\LogManager
- */ 
+ * Earls\FlamingoCommandQueueBundle\Manager\LogManager.
+ */
 class LogManager
 {
     public function getShortLogs(array $logs, $startlength = 20, $endLength = 20)

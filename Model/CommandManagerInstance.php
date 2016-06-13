@@ -5,7 +5,7 @@ namespace Earls\FlamingoCommandQueueBundle\Model;
 use Doctrine\ORM\EntityManager;
 
 /**
- * Earls\FlamingoCommandQueueBundle\Model\CommandManagerInstance
+ * Earls\FlamingoCommandQueueBundle\Model\CommandManagerInstance.
  *
  * Manage only one instance of command, create a new object in order to manage more than one
  */
@@ -170,19 +170,19 @@ class CommandManagerInstance
 
         return $this;
     }
-    
+
     protected function getFlgCommandOption()
     {
-        return $this->flgCommandOption?$this->flgCommandOption:$this->getDefaultFlgCommandOption();
+        return $this->flgCommandOption ? $this->flgCommandOption : $this->getDefaultFlgCommandOption();
     }
-    
+
     protected function setFlgCommandOption(FlgCommandOption $flgCommandOption = null)
     {
         $this->flgCommandOption = $flgCommandOption;
-        
+
         return $this;
     }
-    
+
     protected function getDefaultFlgCommandOption()
     {
         return new FlgCommandOption();

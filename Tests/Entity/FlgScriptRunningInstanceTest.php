@@ -10,9 +10,9 @@ class FlgScriptRunningInstanceTest extends \PHPUnit_Framework_TestCase
     public function testCreateEntity()
     {
         $flgScript = new FlgScript();
-        
+
         $entity = new FlgScriptRunningInstance();
-        
+
         $entity->setPid();
         $entity->setStatus('test2');
         $entity->setGroupSha('test3');
@@ -22,7 +22,7 @@ class FlgScriptRunningInstanceTest extends \PHPUnit_Framework_TestCase
         $entity->setUniqueSha('test5');
         $entity->setUniqueId('test6');
         $entity->setLog('test7');
-        
+
         $this->assertNull($entity->getId());
         $this->assertEquals(posix_getpid(), $entity->getPid());
         $this->assertEquals('test2', $entity->getStatus());

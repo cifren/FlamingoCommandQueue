@@ -10,7 +10,7 @@ use Earls\FlamingoCommandQueueBundle\Manager\LogManager;
 use Earls\FlamingoCommandQueueBundle\Entity\FlgWatchScript;
 
 /**
- * Earls\FlamingoCommandQueueBundle\Model\ExecutionControl
+ * Earls\FlamingoCommandQueueBundle\Model\ExecutionControl.
  *
  * it is the control tower of the script instance
  */

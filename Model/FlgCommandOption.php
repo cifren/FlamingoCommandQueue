@@ -3,8 +3,8 @@
 namespace Earls\FlamingoCommandQueueBundle\Model;
 
 /**
- * Earls\FlamingoCommandQueueBundle\Model\FlgCommandOption
- */ 
+ * Earls\FlamingoCommandQueueBundle\Model\FlgCommandOption.
+ */
 class FlgCommandOption
 {
     /**
