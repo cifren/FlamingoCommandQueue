@@ -1,6 +1,6 @@
 <?php
 
-namespace Earls\FlamingoCommandQueueBundle\Tests\Manager;
+namespace Earls\FlamingoCommandQueueBundle\Tests\Model;
 
 use Earls\FlamingoCommandQueueBundle\Model\CommandManagerInstance;
 use Earls\FlamingoCommandQueueBundle\Model\FlgCommandOption;
