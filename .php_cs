@@ -2,6 +2,7 @@
 $finder = Symfony\CS\Finder\DefaultFinder::create()
     ->exclude('vendor')
     ->exclude('Resources')
+    ->exclude('Tests/var')
     ->exclude('.git')
     ->in(__DIR__)
 ;
